@@ -1,4 +1,4 @@
-package de.whiteo.RP;
+package de.whiteo.rp;
 
 import org.pcap4j.core.*;
 import org.pcap4j.packet.Packet;
