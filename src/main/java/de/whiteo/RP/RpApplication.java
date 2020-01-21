@@ -1,16 +1,19 @@
 package de.whiteo.rp;
 
+import de.whiteo.rp.model.OutPacket;
+import de.whiteo.rp.service.PacketServiceImpl;
 import org.pcap4j.core.*;
 import org.pcap4j.packet.Packet;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.net.InetAddress;
+import java.util.Scanner;
 
 @SpringBootApplication
 public class RpApplication {
 
-    //SpringApplication.run(RpApplication.class, args);
-    static PcapNetworkInterface getNetworkDevice() throws PcapNativeException {
+
+   /*static PcapNetworkInterface getNetworkDevice() throws PcapNativeException {
 
         PcapNetworkInterface device = null;
         try {
@@ -19,9 +22,11 @@ public class RpApplication {
             e.printStackTrace();
         }
         return device;
-    }
+    }*/
 
-    public static void main(String[] args) throws PcapNativeException, NotOpenException {
+    public static void main(String[] args) {
+
+        SpringApplication.run(RpApplication.class, args);
        /* PcapNetworkInterface device = getNetworkDevice();
         System.out.println(device);
 
