@@ -2,29 +2,28 @@ package de.whiteo.rp;
 
 import org.pcap4j.core.*;
 import org.pcap4j.packet.Packet;
-import org.pcap4j.util.NifSelector;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.io.IOException;
+import java.net.InetAddress;
 
 @SpringBootApplication
 public class RpApplication {
 
     //SpringApplication.run(RpApplication.class, args);
-    static PcapNetworkInterface getNetworkDevice() {
+    static PcapNetworkInterface getNetworkDevice() throws PcapNativeException {
+
         PcapNetworkInterface device = null;
         try {
-            device = new NifSelector().selectNetworkInterface();
-        } catch (IOException e) {
+            device = Pcaps.getDevByName(InetAddress.getLoopbackAddress().getHostName());
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return device;
     }
 
     public static void main(String[] args) throws PcapNativeException, NotOpenException {
-        PcapNetworkInterface device = getNetworkDevice();
-        System.out.println("You chose: " + device);
+       /* PcapNetworkInterface device = getNetworkDevice();
+        System.out.println(device);
 
         // New code below here
         if (device == null) {
@@ -62,6 +61,6 @@ public class RpApplication {
         }
 
         // Cleanup when complete
-        handle.close();
+        handle.close();*/
     }
 }

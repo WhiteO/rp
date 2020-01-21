@@ -1,5 +1,7 @@
 package de.whiteo.rp.model;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -7,70 +9,96 @@ import java.util.UUID;
  * @author Ruslan Tanas {@literal <skyuser13@gmail.com>}
  */
 
-public class OutPacket {
+@Entity
+@Table(name = "packets")
+public class OutPacket implements Serializable {
 
-    private UUID bindID;
-    private UUID clientVerID;
-    private UUID objectID;
-    private UUID firstID;
-    private UUID parentID;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+    @Column(name = "bindId")
+    private UUID bindId;
+    @Column(name = "clientVerId")
+    private UUID clientVerId;
+    @Column(name = "objectId")
+    private UUID objectId;
+    @Column(name = "firstId")
+    private UUID firstId;
+    @Column(name = "parentId")
+    private UUID parentId;
+    @Column(name = "name")
     private String name;
+    @Column(name = "comment")
     private String comment;
+    @Column(name = "isAccepted", nullable = false, columnDefinition = "boolean default false")
     private Boolean isAccepted;
+    @Column(name = "isSent", nullable = false, columnDefinition = "boolean default false")
+    private Boolean isSent;
 
     public OutPacket() {
     }
 
-    public OutPacket(UUID bindID, UUID clientVerID, UUID objectID, UUID firstID, UUID parentID,
-                     String name, String comment, Boolean isAccepted) {
-        this.bindID = bindID;
-        this.clientVerID = clientVerID;
-        this.objectID = objectID;
-        this.firstID = firstID;
-        this.parentID = parentID;
+    public OutPacket(Long id, UUID bindId, UUID clientVerId, UUID objectId, UUID firstId, UUID parentId, String name,
+                     String comment, Boolean isAccepted, Boolean isSent) {
+        this.id = id;
+        this.bindId = bindId;
+        this.clientVerId = clientVerId;
+        this.objectId = objectId;
+        this.firstId = firstId;
+        this.parentId = parentId;
         this.name = name;
         this.comment = comment;
         this.isAccepted = isAccepted;
+        this.isSent = isSent;
     }
 
-    public UUID getBindID() {
-        return bindID;
+    public Long getId() {
+        return id;
     }
 
-    public void setBindID(UUID bindID) {
-        this.bindID = bindID;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public UUID getClientVerID() {
-        return clientVerID;
+    public UUID getBindId() {
+        return bindId;
     }
 
-    public void setClientVerID(UUID clientVerID) {
-        this.clientVerID = clientVerID;
+    public void setBindId(UUID bindId) {
+        this.bindId = bindId;
     }
 
-    public UUID getObjectID() {
-        return objectID;
+    public UUID getClientVerId() {
+        return clientVerId;
     }
 
-    public void setObjectID(UUID objectID) {
-        this.objectID = objectID;
+    public void setClientVerId(UUID clientVerId) {
+        this.clientVerId = clientVerId;
     }
 
-    public UUID getFirstID() {
-        return firstID;
+    public UUID getObjectId() {
+        return objectId;
     }
 
-    public void setFirstID(UUID firstID) {
-        this.firstID = firstID;
+    public void setObjectId(UUID objectId) {
+        this.objectId = objectId;
     }
 
-    public UUID getParentID() {
-        return parentID;
+    public UUID getFirstId() {
+        return firstId;
     }
 
-    public void setParentID(UUID parentID) {
-        this.parentID = parentID;
+    public void setFirstId(UUID firstId) {
+        this.firstId = firstId;
+    }
+
+    public UUID getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(UUID parentId) {
+        this.parentId = parentId;
     }
 
     public String getName() {
@@ -89,17 +117,25 @@ public class OutPacket {
         this.comment = comment;
     }
 
-    public Boolean isAccepted() {
+    public Boolean getAccepted() {
         return isAccepted;
     }
 
     public void setAccepted(Boolean accepted) {
-        this.isAccepted = accepted;
+        isAccepted = accepted;
+    }
+
+    public Boolean getSent() {
+        return isSent;
+    }
+
+    public void setSent(Boolean sent) {
+        isSent = sent;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(bindID, clientVerID, objectID, firstID, parentID, name, comment, isAccepted);
+        return Objects.hash(id, bindId, clientVerId, objectId, firstId, parentId, name, comment, isAccepted, isSent);
     }
 
     @Override
@@ -107,13 +143,15 @@ public class OutPacket {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OutPacket outPacket = (OutPacket) o;
-        return Objects.equals(bindID, outPacket.bindID) &&
-                Objects.equals(clientVerID, outPacket.clientVerID) &&
-                Objects.equals(objectID, outPacket.objectID) &&
-                Objects.equals(firstID, outPacket.firstID) &&
-                Objects.equals(parentID, outPacket.parentID) &&
+        return Objects.equals(id, outPacket.id) &&
+                Objects.equals(bindId, outPacket.bindId) &&
+                Objects.equals(clientVerId, outPacket.clientVerId) &&
+                Objects.equals(objectId, outPacket.objectId) &&
+                Objects.equals(firstId, outPacket.firstId) &&
+                Objects.equals(parentId, outPacket.parentId) &&
                 Objects.equals(name, outPacket.name) &&
                 Objects.equals(comment, outPacket.comment) &&
-                Objects.equals(isAccepted, outPacket.isAccepted);
+                Objects.equals(isAccepted, outPacket.isAccepted) &&
+                Objects.equals(isSent, outPacket.isSent);
     }
 }
