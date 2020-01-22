@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>de.whiteo</groupId>
-	<artifactId>RP</artifactId>
+	<artifactId>rp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>RP</name>
+	<name>rp</name>
 	<description>rapid for capturing packet </description>
 
 	<properties>

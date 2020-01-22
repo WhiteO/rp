@@ -39,6 +39,17 @@ public class OutPacket implements Serializable {
     public OutPacket() {
     }
 
+    public OutPacket(UUID bindId, UUID clientVerId, UUID objectId, UUID firstId, UUID parentId, String name,
+                     String comment) {
+        this.bindId = bindId;
+        this.clientVerId = clientVerId;
+        this.objectId = objectId;
+        this.firstId = firstId;
+        this.parentId = parentId;
+        this.name = name;
+        this.comment = comment;
+    }
+
     public OutPacket(Long id, UUID bindId, UUID clientVerId, UUID objectId, UUID firstId, UUID parentId, String name,
                      String comment, Boolean isAccepted, Boolean isSent) {
         this.id = id;

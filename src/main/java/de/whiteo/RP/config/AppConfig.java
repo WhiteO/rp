@@ -11,14 +11,14 @@ import javax.persistence.EntityManagerFactory;
  * @author Ruslan Tanas {@literal <skyuser13@gmail.com>}
  */
 
-@Configuration
-@EnableTransactionManagement
-@ComponentScan("de.whiteo.rp.service")
-@EnableJpaRepositories(basePackages = "de.whiteo.rp.repository")
+//@Configuration
+//@EnableTransactionManagement
+//@ComponentScan("de.whiteo.rp.service")
+//@EnableJpaRepositories(basePackages = "de.whiteo.rp.repository")
 public class AppConfig {
 
-    @Autowired
-    private EntityManagerFactory entityManagerFactory;
+    //@Autowired
+    //private EntityManagerFactory entityManagerFactory;
 
     /*@Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
