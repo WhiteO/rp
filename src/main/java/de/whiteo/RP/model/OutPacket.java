@@ -10,30 +10,30 @@ import java.util.UUID;
  */
 
 @Entity
-@Table(name = "packets")
+@Table(name = "PACKETS")
 public class OutPacket implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(name = "bindId")
+    @Column(name = "BIND_ID")
     private UUID bindId;
-    @Column(name = "clientVerId")
+    @Column(name = "CLIENT_VER_ID")
     private UUID clientVerId;
-    @Column(name = "objectId")
+    @Column(name = "OBJECT_ID")
     private UUID objectId;
-    @Column(name = "firstId")
+    @Column(name = "FIRST_ID")
     private UUID firstId;
-    @Column(name = "parentId")
+    @Column(name = "PARENT_ID")
     private UUID parentId;
-    @Column(name = "name")
+    @Column(name = "NAME")
     private String name;
-    @Column(name = "comment")
+    @Column(name = "COMMENT")
     private String comment;
-    @Column(name = "isAccepted", nullable = false, columnDefinition = "boolean default false")
+    @Column(name = "IS_ACCEPTED", nullable = false, columnDefinition = "boolean default false")
     private Boolean isAccepted;
-    @Column(name = "isSent", nullable = false, columnDefinition = "boolean default false")
+    @Column(name = "IS_SENT", nullable = false, columnDefinition = "boolean default false")
     private Boolean isSent;
 
     public OutPacket() {
