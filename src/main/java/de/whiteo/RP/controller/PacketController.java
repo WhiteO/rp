@@ -3,6 +3,8 @@ package de.whiteo.rp.controller;
 import de.whiteo.rp.model.OutPacket;
 import de.whiteo.rp.service.PacketService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,8 +18,9 @@ public class PacketController {
     @Autowired
     private PacketService packetService;
 
-    public OutPacket createPacket(@RequestBody OutPacket outPacket) {
-        return packetService.createPacket(outPacket);
+    @GetMapping("/api")
+    public OutPacket getPacket(@PathVariable String getPacket) {
+        return packetService.getPacket(getPacket);
     }
 
 }

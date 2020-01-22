@@ -7,8 +7,5 @@ import de.whiteo.rp.model.OutPacket;
  */
 
 public interface PacketService {
-    OutPacket createPacket(OutPacket outPacket);
-    OutPacket updatePacket(OutPacket outPacket);
-    OutPacket getPacket(OutPacket outPacket);
-    OutPacket deletePacket(OutPacket outPacket);
+    OutPacket getPacket(String getPacket);
 }

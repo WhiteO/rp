@@ -5,9 +5,9 @@ import de.whiteo.rp.service.PacketServiceImpl;
 import org.pcap4j.core.*;
 import org.pcap4j.packet.Packet;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import java.net.InetAddress;
-import java.util.Scanner;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 
 @SpringBootApplication
 public class RpApplication {
@@ -25,6 +25,8 @@ public class RpApplication {
     }*/
 
     public static void main(String[] args) {
+
+        //new SpringApplicationBuilder(RpApplication.class).web(WebApplicationType.NONE).run(args);
 
         SpringApplication.run(RpApplication.class, args);
        /* PcapNetworkInterface device = getNetworkDevice();

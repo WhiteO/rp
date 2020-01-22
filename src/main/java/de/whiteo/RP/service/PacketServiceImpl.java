@@ -21,23 +21,7 @@ public class PacketServiceImpl implements PacketService {
     private PacketRepository packetRepository;
 
     @Override
-    public OutPacket createPacket(OutPacket outPacket) {
-        packetRepository.saveAndFlush(outPacket);
-        return outPacket;
-    }
-
-    @Override
-    public OutPacket updatePacket(OutPacket outPacket) {
-        return null;
-    }
-
-    @Override
-    public OutPacket getPacket(OutPacket outPacket) {
-        return null;
-    }
-
-    @Override
-    public OutPacket deletePacket(OutPacket outPacket) {
-        return null;
+    public OutPacket getPacket(String getPacket) {
+        return new OutPacket();
     }
 }
