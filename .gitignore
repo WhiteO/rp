@@ -1,8 +1,12 @@
 .idea
 /target
+/out
+/META-INF
 .mvn
 *.iws
 *.iml
 *.ipr
 *.db
-
+*.class
+*.jar
+*.MF
