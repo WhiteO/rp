@@ -42,6 +42,15 @@ public class PacketServiceImpl implements PacketService {
         criteria = cb.and(criteria, p);
         outPacketCriteria.where(criteria);
         return em.createQuery(outPacketCriteria).getResultList();
-
     }
+
+    @Override
+    public void addPacket(OutPacket outPacket) {
+        packetRepository.saveAndFlush(outPacket);
+    }
+
+    /*@Override
+    public void updatePacket(OutPacket requestOutPacket) {
+        OutPacket outPacket = packetRepository.findById()
+    }*/
 }
