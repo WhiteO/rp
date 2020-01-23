@@ -13,7 +13,7 @@ public class PacketLoop implements Runnable {
 
 	final PcapNetworkInterface networkInterface;
 	final PacketListener listener;
-    final Consumer<PcapHandle> consumer;
+  final Consumer<PcapHandle> consumer;
 
     public PacketLoop(PcapNetworkInterface networkInterface,
                       PacketListener listener,

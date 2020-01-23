@@ -22,4 +22,12 @@ public class PacketController {
     public List<OutPacket> getPacket() {
         return packetService.getPackets();
     }
+
+    public void addPacket(OutPacket outPacket) {
+        packetService.addPacket(outPacket);
+    }
+
+    /*public void updatePacket(OutPacket outPacket) {
+        packetService.updatePacket(outPacket);
+    }*/
 }

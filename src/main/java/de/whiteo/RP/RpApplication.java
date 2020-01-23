@@ -1,5 +1,6 @@
 package de.whiteo.rp;
 
+import de.whiteo.rp.util.InitPacketMon;
 import de.whiteo.rp.util.PacketLoop;
 import org.pcap4j.core.*;
 import org.pcap4j.packet.Packet;
@@ -15,7 +16,7 @@ public class RpApplication {
         final int MAX_PACKETS = 2000;
 
         final PcapNetworkInterface device = Pcaps.getDevByName(DEVICE_NAME);
-        final PacketListener listener = System.out::println;
+        final PacketListener listener = System.out::println
 
         new PacketLoop(device, listener, handle -> {
             try {

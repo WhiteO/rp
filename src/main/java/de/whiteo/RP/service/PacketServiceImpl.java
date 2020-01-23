@@ -30,18 +30,25 @@ public class PacketServiceImpl implements PacketService {
     public List<OutPacket> getPackets() {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
-
         CriteriaQuery<OutPacket> outPacketCriteria = cb.createQuery(OutPacket.class);
         Root<OutPacket> outPacketRoot = outPacketCriteria.from(OutPacket.class);
         outPacketCriteria.multiselect(outPacketRoot.get("bindId"), outPacketRoot.get("clientVerId"),
                 outPacketRoot.get("objectId"), outPacketRoot.get("firstId"), outPacketRoot.get("parentId"),
                 outPacketRoot.get("name"), outPacketRoot.get("comment"));
         Predicate criteria = cb.conjunction();
-
         Predicate p = cb.equal(outPacketRoot.get("isSent"), false);
         criteria = cb.and(criteria, p);
         outPacketCriteria.where(criteria);
         return em.createQuery(outPacketCriteria).getResultList();
-
     }
+
+    @Override
+    public void addPacket(OutPacket outPacket) {
+        packetRepository.saveAndFlush(outPacket);
+    }
+
+    /*@Override
+    public void updatePacket(OutPacket requestOutPacket) {
+        OutPacket outPacket = packetRepository.findById()
+    }*/
 }
