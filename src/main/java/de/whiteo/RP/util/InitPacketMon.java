@@ -1,54 +1,52 @@
 package de.whiteo.rp.util;
 
-import org.pcap4j.core.*;
 import org.pcap4j.packet.Packet;
-import org.slf4j.LoggerFactory;
+
+import static org.pcap4j.util.ByteArrays.toHexString;
 
 /**
  * @author Ruslan Tanas {@literal <skyuser13@gmail.com>}
  */
 
-public class InitPacketMon  implements Runnable {
+public class InitPacketMon {
 
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(InitPacketMon.class);
-    int snapshotLength = 65536;
-    int readTimeout = 10;
-    String filter = "tcp dst port 1542 and ip[2:2] > 5000";
+    public static void run(Packet packet) {
 
-    @Override
-    public void run() {
-        PcapNetworkInterface loopbackNetworkDevice = getLoopbackNetworkDevice();
-        if (loopbackNetworkDevice == null) {
-            logger.error("No device chosen.");
-            System.exit(1);
-        }
+        String hexString = toHexString(packet.getRawData(), "");
+        String string = convertHexToString(hexString);
 
-        try (final PcapHandle handle = loopbackNetworkDevice.openLive(snapshotLength,
-                PcapNetworkInterface.PromiscuousMode.PROMISCUOUS, readTimeout)) {
-            handle.setFilter(filter, BpfProgram.BpfCompileMode.OPTIMIZE);
+        int bind = string.indexOf("<crs:bind bindID=");
+        int clientVerId = string.indexOf("<crs:clientVerID value=");
+        int firstId = string.indexOf("<crs:first value=");
+        int classId = string.indexOf("<crs:classID value=");
+        int parentId = string.indexOf("<crs:parentID value=");
+        int nameBegin = string.indexOf("<crs:name value=");
+        int nameLast = string.indexOf("><crs:pos>");
+        int commentBegin = string.indexOf("<crs:comment>");
+        int commentLast = string.indexOf("</crs:comment>");
 
-            PacketListener listener = new PacketListener() {
-                @Override
-                public void gotPacket(Packet packet) {
 
-                }
-            };
+        System.out.println(string);
 
-            int maxPackets = 2000;
-            handle.loop(maxPackets, listener);
+        String ss1 = string.substring(bind+18, bind+54);
+        String ss2 = string.substring(clientVerId+24, clientVerId+60);
+        String ss3 = string.substring(firstId+18, firstId+54);
+        String ss4 = string.substring(classId+20, classId+56);
+        String ss5 = string.substring(parentId+21, parentId+57);
+        String ss6 = string.substring(nameBegin+17, nameLast-2);
 
-        } catch (Exception e) {
-            logger.error(e.toString());
-        }
+
+
+
     }
 
-    static PcapNetworkInterface getLoopbackNetworkDevice() {
-        PcapNetworkInterface device = null;
-        try {
-            device = Pcaps.getDevByName("\\Device\\NPF_Loopback");
-        } catch (Exception e) {
-            logger.error(e.toString());
+    public static String convertHexToString(String hex) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < hex.length() - 1; i += 2) {
+            String output = hex.substring(i, (i + 2));
+            int decimal = Integer.parseInt(output, 16);
+            sb.append((char) decimal);
         }
-        return device;
+        return sb.toString();
     }
 }
