@@ -1,6 +1,9 @@
 package de.whiteo.rp.util;
 
 import org.pcap4j.packet.Packet;
+import org.springframework.http.converter.json.GsonBuilderUtils;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.pcap4j.util.ByteArrays.toHexString;
 
@@ -10,12 +13,25 @@ import static org.pcap4j.util.ByteArrays.toHexString;
 
 public class InitPacketMon {
 
-    public static void run(Packet packet) {
+    public static void run(Packet packet, ConcurrentHashMap<Integer, String> map) {
 
         String hexString = toHexString(packet.getRawData(), "");
         String string = convertHexToString(hexString);
 
-        int bind = string.indexOf("<crs:bind bindID=");
+        System.out.println(packet.getHeader().toString());
+
+
+        if (map.isEmpty()) {
+            map.put(1, string);
+        } else {
+            String oldString = map.get(1);
+            String newString = oldString.concat(string);
+            map.replace(1,oldString,newString);
+        }
+
+        //System.out.println(map.get(1));
+
+       /* int bind = string.indexOf("<crs:bind bindID=");
         int clientVerId = string.indexOf("<crs:clientVerID value=");
         int firstId = string.indexOf("<crs:first value=");
         int classId = string.indexOf("<crs:classID value=");
@@ -25,7 +41,6 @@ public class InitPacketMon {
         int commentBegin = string.indexOf("<crs:comment>");
         int commentLast = string.indexOf("</crs:comment>");
 
-
         System.out.println(string);
 
         String ss1 = string.substring(bind+18, bind+54);
@@ -33,9 +48,7 @@ public class InitPacketMon {
         String ss3 = string.substring(firstId+18, firstId+54);
         String ss4 = string.substring(classId+20, classId+56);
         String ss5 = string.substring(parentId+21, parentId+57);
-        String ss6 = string.substring(nameBegin+17, nameLast-2);
-
-
+        String ss6 = string.substring(nameBegin+17, nameLast-2);*/
 
 
     }
