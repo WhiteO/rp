@@ -1,11 +1,17 @@
 package de.whiteo.rp.util;
 
 import org.pcap4j.packet.Packet;
-import org.springframework.http.converter.json.GsonBuilderUtils;
+import org.pcap4j.packet.TcpPacket;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 
-import java.util.concurrent.ConcurrentHashMap;
-
-import static org.pcap4j.util.ByteArrays.toHexString;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.StringReader;
+import java.util.Map;
 
 /**
  * @author Ruslan Tanas {@literal <skyuser13@gmail.com>}
@@ -13,15 +19,53 @@ import static org.pcap4j.util.ByteArrays.toHexString;
 
 public class InitPacketMon {
 
-    public static void run(Packet packet, ConcurrentHashMap<Integer, String> map) {
+    public static void run(Packet packet, Map<Integer,
+            TcpSession> sessions) {
 
-        String hexString = toHexString(packet.getRawData(), "");
-        String string = convertHexToString(hexString);
+        //String hexString = toHexString(packet.get(TcpPacket.class).getPayload().getRawData(), "");
+        //String string = convertHexToString(hexString);
 
-        System.out.println(packet.getHeader().toString());
+        TcpPacket tcp = packet.get(TcpPacket.class);
 
+        int window = tcp.getHeader().getWindowAsInt();
 
-        if (map.isEmpty()) {
+        TcpSession session;
+
+        if (sessions.isEmpty()) {
+            session = new TcpSession();
+            session.setWindow(window);
+            sessions.put(1, session);
+        } else {
+            session = sessions.get(1);
+        }
+
+        if (window == session.getWindow()) {
+            session.getPackets().add(tcp);
+            long seq = tcp.getHeader().getSequenceNumberAsLong();
+            session.setSeqNumOffset(seq + 1L);
+        } else {
+            Document document = convertXMLFileToXMLDocument(TcpReassembler.doReassemble(session.getPackets()));
+            int ina = 1;
+        }
+
+        /*session = sessions.get(port);
+        long seq = tcp.getHeader().getSequenceNumberAsLong();
+        session.setSeqNumOffset(seq + 1L);
+        session.getPackets(isToServer).add(tcp);*/
+
+        /*byte[] reassembledPayload
+                = TcpReassembler.doReassemble(
+                session.getPackets(),
+                session.getSeqNumOffset(),
+                tcp.getHeader().getSequenceNumberAsLong(),
+                tcp.getPayload().length()
+        );*/
+
+        //System.out.println(packet.get(TcpPacket.class).getPayload());
+
+        //аSystem.out.println(packet.get(TcpPacket.class).getHeader().toString());
+
+        /*if (map.isEmpty()) {
             map.put(1, string);
         } else {
             String oldString = map.get(1);
@@ -31,7 +75,7 @@ public class InitPacketMon {
 
         //System.out.println(map.get(1));
 
-       /* int bind = string.indexOf("<crs:bind bindID=");
+        int bind = string.indexOf("<crs:bind bindID=");
         int clientVerId = string.indexOf("<crs:clientVerID value=");
         int firstId = string.indexOf("<crs:first value=");
         int classId = string.indexOf("<crs:classID value=");
@@ -53,13 +97,35 @@ public class InitPacketMon {
 
     }
 
-    public static String convertHexToString(String hex) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < hex.length() - 1; i += 2) {
-            String output = hex.substring(i, (i + 2));
-            int decimal = Integer.parseInt(output, 16);
-            sb.append((char) decimal);
+    private static Document convertXMLFileToXMLDocument(String string) {
+        //Parser that produces DOM object trees from XML content
+        //DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+        //API to obtain DOM Document instance
+
+        try {
+
+            Document dom;
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            //Create DocumentBuilder with default configuration
+            //builder = factory.newDocumentBuilder();
+
+
+            File tempFile = File.createTempFile("t_"+Math.random() * (10000 - 1) + 1, ".xml");
+            BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile));
+            bw.write(string);
+            bw.close();
+
+            //Parse the content to Document object
+            dom = db.parse(tempFile);
+
+            tempFile.deleteOnExit();
+
+            return dom;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return sb.toString();
+        return null;
     }
 }
