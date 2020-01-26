@@ -6,6 +6,7 @@ import java.util.UUID;
 /**
  * @author Ruslan Tanas {@literal <skyuser13@gmail.com>}
  */
+
 public class PacketDTO {
 
     private Optional<UUID> bindId;
@@ -15,7 +16,6 @@ public class PacketDTO {
     private Optional<UUID> parentId;
     private Optional<String> name;
     private Optional<String> comment;
-    private Optional<Boolean> isAccepted;
     private Optional<Boolean> isSent;
 
     public PacketDTO() {
@@ -24,7 +24,7 @@ public class PacketDTO {
 
     public PacketDTO(Optional<UUID> bindId, Optional<UUID> clientVerId, Optional<UUID> objectId,
                      Optional<UUID> firstId, Optional<UUID> parentId, Optional<String> name,
-                     Optional<String> comment, Optional<Boolean> isAccepted, Optional<Boolean> isSent) {
+                     Optional<String> comment, Optional<Boolean> isSent) {
         this.bindId = bindId;
         this.clientVerId = clientVerId;
         this.objectId = objectId;
@@ -32,7 +32,6 @@ public class PacketDTO {
         this.parentId = parentId;
         this.name = name;
         this.comment = comment;
-        this.isAccepted = isAccepted;
         this.isSent = isSent;
     }
 
@@ -90,14 +89,6 @@ public class PacketDTO {
 
     public void setComment(Optional<String> comment) {
         this.comment = comment;
-    }
-
-    public Optional<Boolean> getIsAccepted() {
-        return isAccepted;
-    }
-
-    public void setIsAccepted(Optional<Boolean> isAccepted) {
-        this.isAccepted = isAccepted;
     }
 
     public Optional<Boolean> getIsSent() {

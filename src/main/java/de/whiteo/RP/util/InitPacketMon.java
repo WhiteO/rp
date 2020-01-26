@@ -19,8 +19,7 @@ import java.util.Map;
 
 public class InitPacketMon {
 
-    public static void run(Packet packet, Map<Integer,
-            TcpSession> sessions) {
+    public static void run(Packet packet, Map<Integer, TcpSession> sessions) {
 
         //String hexString = toHexString(packet.get(TcpPacket.class).getPayload().getRawData(), "");
         //String string = convertHexToString(hexString);
@@ -44,7 +43,22 @@ public class InitPacketMon {
             long seq = tcp.getHeader().getSequenceNumberAsLong();
             session.setSeqNumOffset(seq + 1L);
         } else {
-            Document document = convertXMLFileToXMLDocument(TcpReassembler.doReassemble(session.getPackets()));
+
+            String str = TcpReassembler.doReassemble(session.getPackets());
+
+            DocumentBuilderFactory dbf =
+                    DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = null;
+            try {
+                db = dbf.newDocumentBuilder();
+                InputSource is = new InputSource();
+                is.setCharacterStream(new StringReader(str));
+
+                Document doc = db.parse(is);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             int ina = 1;
         }
 
@@ -95,6 +109,20 @@ public class InitPacketMon {
         String ss6 = string.substring(nameBegin+17, nameLast-2);*/
 
 
+    }
+
+    private static Document convertStringToDocument(String xmlStr) {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder;
+        try
+        {
+            builder = factory.newDocumentBuilder();
+            Document doc = builder.parse( new InputSource( new StringReader( xmlStr ) ) );
+            return doc;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private static Document convertXMLFileToXMLDocument(String string) {
