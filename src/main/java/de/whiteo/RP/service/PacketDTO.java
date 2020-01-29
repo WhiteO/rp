@@ -1,101 +1,102 @@
 package de.whiteo.rp.service;
 
-import java.util.Optional;
+import com.thoughtworks.xstream.annotations.*;
+import com.thoughtworks.xstream.converters.basic.UUIDConverter;
+
+import java.util.List;
 import java.util.UUID;
 
 /**
  * @author Ruslan Tanas {@literal <skyuser13@gmail.com>}
  */
-
+@XStreamAlias("crs:call")
 public class PacketDTO {
 
-    private Optional<UUID> bindId;
-    private Optional<UUID> clientVerId;
-    private Optional<UUID> objectId;
-    private Optional<UUID> firstId;
-    private Optional<UUID> parentId;
-    private Optional<String> name;
-    private Optional<String> comment;
-    private Optional<Boolean> isSent;
+    @XStreamAlias("crs:auth")
+    private String autch;
+    @XStreamOmitField
+    private List<UUID> objectId;
+    @XStreamOmitField
+    private List<UUID> parentId;
+    @XStreamOmitField
+    private List<String> name;
+    @XStreamAlias("crs:bind")
+    @XStreamConverter(value= UUIDConverter.class)
+    @XStreamAsAttribute
+    private UUID bindID;
+    @XStreamAlias("value")
+    private UUID clientVerId;
+    @XStreamAlias("comment")
+    private String comment;
+    @XStreamOmitField
+    private Boolean isSent;
 
     public PacketDTO() {
-
     }
 
-    public PacketDTO(Optional<UUID> bindId, Optional<UUID> clientVerId, Optional<UUID> objectId,
-                     Optional<UUID> firstId, Optional<UUID> parentId, Optional<String> name,
-                     Optional<String> comment, Optional<Boolean> isSent) {
-        this.bindId = bindId;
-        this.clientVerId = clientVerId;
+    public PacketDTO(List<UUID> objectId, List<UUID> parentId, List<String> name, UUID bindId, UUID clientVerId, String comment, Boolean isSent) {
         this.objectId = objectId;
-        this.firstId = firstId;
         this.parentId = parentId;
         this.name = name;
+        this.bindID = bindId;
+        this.clientVerId = clientVerId;
         this.comment = comment;
         this.isSent = isSent;
     }
 
-    public Optional<UUID> getBindId() {
-        return bindId;
-    }
-
-    public void setBindId(Optional<UUID> bindId) {
-        this.bindId = bindId;
-    }
-
-    public Optional<UUID> getClientVerId() {
-        return clientVerId;
-    }
-
-    public void setClientVerId(Optional<UUID> clientVerId) {
-        this.clientVerId = clientVerId;
-    }
-
-    public Optional<UUID> getObjectId() {
+    public List<UUID> getObjectId() {
         return objectId;
     }
 
-    public void setObjectId(Optional<UUID> objectId) {
+    public void setObjectId(List<UUID> objectId) {
         this.objectId = objectId;
     }
 
-    public Optional<UUID> getFirstId() {
-        return firstId;
-    }
-
-    public void setFirstId(Optional<UUID> firstId) {
-        this.firstId = firstId;
-    }
-
-    public Optional<UUID> getParentId() {
+    public List<UUID> getParentId() {
         return parentId;
     }
 
-    public void setParentId(Optional<UUID> parentId) {
+    public void setParentId(List<UUID> parentId) {
         this.parentId = parentId;
     }
 
-    public Optional<String> getName() {
+    public List<String> getName() {
         return name;
     }
 
-    public void setName(Optional<String> name) {
+    public void setName(List<String> name) {
         this.name = name;
     }
 
-    public Optional<String> getComment() {
+    public UUID getBindId() {
+        return bindID;
+    }
+
+    public void setBindId(UUID bindId) {
+        this.bindID = bindId;
+    }
+
+    public UUID getClientVerId() {
+        return clientVerId;
+    }
+
+    public void setClientVerId(UUID clientVerId) {
+        this.clientVerId = clientVerId;
+    }
+
+    public String getComment() {
         return comment;
     }
 
-    public void setComment(Optional<String> comment) {
+    public void setComment(String comment) {
         this.comment = comment;
     }
 
-    public Optional<Boolean> getIsSent() {
+    public Boolean getSent() {
         return isSent;
     }
 
-    public void setIsSent(Optional<Boolean> isSent) {
-        this.isSent = isSent;
+    public void setSent(Boolean sent) {
+        isSent = sent;
     }
 }

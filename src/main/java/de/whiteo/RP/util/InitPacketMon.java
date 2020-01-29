@@ -1,16 +1,28 @@
 package de.whiteo.rp.util;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.annotations.Annotations;
+import de.whiteo.rp.service.PacketDTO;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.TcpPacket;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.StringReader;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
+import java.io.*;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
@@ -46,21 +58,72 @@ public class InitPacketMon {
 
             String str = TcpReassembler.doReassemble(session.getPackets());
 
-            DocumentBuilderFactory dbf =
-                    DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = null;
-            try {
-                db = dbf.newDocumentBuilder();
-                InputSource is = new InputSource();
-                is.setCharacterStream(new StringReader(str));
 
-                Document doc = db.parse(is);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+try {
 
-            int ina = 1;
+    String str2 =new String(str.getBytes(StandardCharsets.ISO_8859_1));
+    /*File tempFile = null;
+    tempFile = File.createTempFile("t_" + Math.random() * (10000 - 1) + 1, ".xml");
+    BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile));
+    bw.write(str2);
+    bw.close();*/
+
+
+    InputSource is = new InputSource();
+    is.setCharacterStream(new StringReader(str2));
+
+
+
+
+    XStream xStream = new XStream();
+    Annotations.configureAliases(xStream, PacketDTO.class);
+    PacketDTO packetDTO = (PacketDTO) xStream.fromXML(str2);
+
+
+    DocumentBuilderFactory df = DocumentBuilderFactory.newInstance();
+    DocumentBuilder builder = df.newDocumentBuilder();
+    Document document = builder.parse(is);
+
+
+
+    document.getElementsByTagName("crs:id").getLength();
+    document.getElementsByTagName("crs:bind").getLength();
+    document.getElementsByTagName("crs:clientVerID").getLength();
+    document.getElementsByTagName("crs:comment").getLength();
+    document.getElementsByTagName("crs:name").getLength();
+    document.getElementsByTagName("crs:parentID").getLength();
+
+    //tempFile.();
+    //document.getElementsByTagName("crs:name").item(0).getAttributes().getNamedItem("value").getTextContent()
+    //document.getElementsByTagName("crs:bind").item(0).getAttributes().getNamedItem("bindID").getTextContent()
+    //document.getElementsByTagName("crs:id").item(0).getAttributes().getNamedItem("value").getTextContent()
+    //document.getElementsByTagName("crs:clientVerID").item(0).getAttributes().getNamedItem("value").getTextContent()
+    //document.getElementsByTagName("crs:comment").item(0).getTextContent()
+    //document.getElementsByTagName("crs:parentID").item(1).getAttributes().getNamedItem("value").getTextContent()
+
+
+    } catch (IOException | ParserConfigurationException | SAXException e) {
+    e.printStackTrace();
+}
+
         }
+
+        /*
+            File tempFile = null;
+    tempFile = File.createTempFile("t_" + Math.random() * (10000 - 1) + 1, ".xml");
+    BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile));
+    bw.write(str);
+    bw.close();
+    tempFile.deleteOnExit();
+
+    // create an instance of the xml file
+    File file = new File("myfile.xml");
+// create a binary input stream
+    FileInputStream fis = new FileInputStream(file);
+// buffering for efficiency
+    BufferedInputStream in = new BufferedInputStream(fis);
+// get an instance of the parser
+         */
 
         /*session = sessions.get(port);
         long seq = tcp.getHeader().getSequenceNumberAsLong();
@@ -111,49 +174,5 @@ public class InitPacketMon {
 
     }
 
-    private static Document convertStringToDocument(String xmlStr) {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder;
-        try
-        {
-            builder = factory.newDocumentBuilder();
-            Document doc = builder.parse( new InputSource( new StringReader( xmlStr ) ) );
-            return doc;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
-    private static Document convertXMLFileToXMLDocument(String string) {
-        //Parser that produces DOM object trees from XML content
-        //DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-
-        //API to obtain DOM Document instance
-
-        try {
-
-            Document dom;
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            //Create DocumentBuilder with default configuration
-            //builder = factory.newDocumentBuilder();
-
-
-            File tempFile = File.createTempFile("t_"+Math.random() * (10000 - 1) + 1, ".xml");
-            BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile));
-            bw.write(string);
-            bw.close();
-
-            //Parse the content to Document object
-            dom = db.parse(tempFile);
-
-            tempFile.deleteOnExit();
-
-            return dom;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }
