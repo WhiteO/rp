@@ -68,30 +68,61 @@ try {
     bw.write(str2);
     bw.close();*/
 
-
     InputSource is = new InputSource();
     is.setCharacterStream(new StringReader(str2));
 
-
-
-
-    XStream xStream = new XStream();
-    Annotations.configureAliases(xStream, PacketDTO.class);
-    PacketDTO packetDTO = (PacketDTO) xStream.fromXML(str2);
-
+    //XStream xStream = new XStream();
+    //Annotations.configureAliases(xStream, PacketDTO.class);
+    //PacketDTO packetDTO = (PacketDTO) xStream.fromXML(str2);
 
     DocumentBuilderFactory df = DocumentBuilderFactory.newInstance();
     DocumentBuilder builder = df.newDocumentBuilder();
     Document document = builder.parse(is);
 
+    NodeList idNodesList = document.getElementsByTagName("crs:id");
+    NodeList bindNodesList = document.getElementsByTagName("crs:bind");
+    NodeList clientVerIDNodesList = document.getElementsByTagName("crs:clientVerID");
+    NodeList commentNodesList = document.getElementsByTagName("crs:comment");
+    NodeList nameNodesList = document.getElementsByTagName("crs:name");
+    NodeList parentIDNodesList = document.getElementsByTagName("crs:parentID");
+
+    for (int i = 0; i < idNodesList.getLength(); i++) {
+        Element item = (Element) idNodesList.item(i);
+        System.out.println(item.getAttribute("value"));
+    }
+
+    for (int i = 0; i < bindNodesList.getLength(); i++) {
+        Element item = (Element) bindNodesList.item(i);
+        System.out.println(item.getAttribute("bindID"));
+    }
+
+    for (int i = 0; i < clientVerIDNodesList.getLength(); i++) {
+        Element item = (Element) clientVerIDNodesList.item(i);
+        System.out.println(item.getAttribute("value"));
+    }
+
+    for (int i = 0; i < commentNodesList.getLength(); i++) {
+        Element item = (Element) commentNodesList.item(i);
+        System.out.println(item.getTextContent());
+    }
+
+    for (int i = 0; i < nameNodesList.getLength(); i++) {
+        Element item = (Element) nameNodesList.item(i);
+        System.out.println(item.getAttribute("value"));
+    }
+
+    for (int i = 0; i < parentIDNodesList.getLength(); i++) {
+        Element item = (Element) parentIDNodesList.item(i);
+        System.out.println(item.getAttribute("value"));
+    }
 
 
     document.getElementsByTagName("crs:id").getLength();
-    document.getElementsByTagName("crs:bind").getLength();
+    /*document.getElementsByTagName("crs:bind").getLength();
     document.getElementsByTagName("crs:clientVerID").getLength();
     document.getElementsByTagName("crs:comment").getLength();
     document.getElementsByTagName("crs:name").getLength();
-    document.getElementsByTagName("crs:parentID").getLength();
+    document.getElementsByTagName("crs:parentID").getLength();*/
 
     //tempFile.();
     //document.getElementsByTagName("crs:name").item(0).getAttributes().getNamedItem("value").getTextContent()
