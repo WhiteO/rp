@@ -11,10 +11,8 @@ import java.util.List;
 
 public final class TcpSession {
 
-    private final List<TcpPacket> packetsToServer = new ArrayList<TcpPacket>();
-    //private final List<TcpPacket> packetsToClient = new ArrayList<TcpPacket>();
-    //private long serverSeqNumOffset;
-    private long clientSeqNumOffset;
+    private final List<TcpPacket> packetsList = new ArrayList<TcpPacket>();
+    private long SeqNumOffset;
     private int window;
 
     public int getWindow() {
@@ -26,38 +24,10 @@ public final class TcpSession {
     }
 
     public List<TcpPacket> getPackets() {
-        return packetsToServer;
-    }
-
-    public long getSeqNumOffset() {
-        return clientSeqNumOffset;
+        return packetsList;
     }
 
     public void setSeqNumOffset(long seqNumOffset) {
-        this.clientSeqNumOffset = seqNumOffset;
+        this.SeqNumOffset = seqNumOffset;
     }
-
-    /*public List<TcpPacket> getPackets(boolean toServer) {
-        if (toServer) {
-            return packetsToServer;
-        } else {
-            return packetsToClient;
-        }
-    }
-
-    public long getSeqNumOffset(boolean toServer) {
-        if (toServer) {
-            return clientSeqNumOffset;
-        } else {
-            return serverSeqNumOffset;
-        }
-    }
-
-    public void setSeqNumOffset(boolean toServer, long seqNumOffset) {
-        if (toServer) {
-            this.clientSeqNumOffset = seqNumOffset;
-        } else {
-            this.serverSeqNumOffset = seqNumOffset;
-        }
-    }*/
 }

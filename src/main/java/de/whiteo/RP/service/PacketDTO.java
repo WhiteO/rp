@@ -1,79 +1,65 @@
 package de.whiteo.rp.service;
 
-import com.thoughtworks.xstream.annotations.*;
-import com.thoughtworks.xstream.converters.basic.UUIDConverter;
-
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
  * @author Ruslan Tanas {@literal <skyuser13@gmail.com>}
  */
-@XStreamAlias("crs:call")
+
 public class PacketDTO {
 
-    @XStreamAlias("crs:auth")
-    private String autch;
-    @XStreamOmitField
-    private List<UUID> objectId;
-    @XStreamOmitField
-    private List<UUID> parentId;
-    @XStreamOmitField
-    private List<String> name;
-    @XStreamAlias("crs:bind")
-    @XStreamConverter(value= UUIDConverter.class)
-    @XStreamAsAttribute
+    private Map<Long,UUID> objectId;
+    private Map<Long,String> name;
+    private Map<Long,UUID> classId;
     private UUID bindID;
-    @XStreamAlias("value")
     private UUID clientVerId;
-    @XStreamAlias("comment")
     private String comment;
-    @XStreamOmitField
     private Boolean isSent;
 
     public PacketDTO() {
     }
 
-    public PacketDTO(List<UUID> objectId, List<UUID> parentId, List<String> name, UUID bindId, UUID clientVerId, String comment, Boolean isSent) {
+    public PacketDTO(Map<Long, UUID> objectId, Map<Long, String> name, Map<Long, UUID> classId, UUID bindID, UUID clientVerId, String comment, Boolean isSent) {
         this.objectId = objectId;
-        this.parentId = parentId;
         this.name = name;
-        this.bindID = bindId;
+        this.classId = classId;
+        this.bindID = bindID;
         this.clientVerId = clientVerId;
         this.comment = comment;
         this.isSent = isSent;
     }
 
-    public List<UUID> getObjectId() {
+    public Map<Long, UUID> getObjectId() {
         return objectId;
     }
 
-    public void setObjectId(List<UUID> objectId) {
+    public void setObjectId(Map<Long, UUID> objectId) {
         this.objectId = objectId;
     }
 
-    public List<UUID> getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(List<UUID> parentId) {
-        this.parentId = parentId;
-    }
-
-    public List<String> getName() {
+    public Map<Long, String> getName() {
         return name;
     }
 
-    public void setName(List<String> name) {
+    public void setName(Map<Long, String> name) {
         this.name = name;
     }
 
-    public UUID getBindId() {
+    public Map<Long, UUID> getClassId() {
+        return classId;
+    }
+
+    public void setClassId(Map<Long, UUID> classId) {
+        this.classId = classId;
+    }
+
+    public UUID getBindID() {
         return bindID;
     }
 
-    public void setBindId(UUID bindId) {
-        this.bindID = bindId;
+    public void setBindID(UUID bindID) {
+        this.bindID = bindID;
     }
 
     public UUID getClientVerId() {
