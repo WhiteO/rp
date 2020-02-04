@@ -2,7 +2,7 @@ package de.whiteo.rp.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -15,46 +15,33 @@ public class OutPacket implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "ID")
     private Long id;
     @Column(name = "BIND_ID")
     private UUID bindId;
     @Column(name = "CLIENT_VER_ID")
     private UUID clientVerId;
-    @Column(name = "OBJECT_ID")
-    private UUID objectId;
-    @Column(name = "PARENT_ID")
-    private UUID parentId;
-    @Column(name = "NAME")
-    private String name;
+    @ElementCollection
+    @CollectionTable(name = "T_OBJECT", joinColumns = @JoinColumn(name = "CLIENT_VER_ID", referencedColumnName = "ID"))
+    @MapKeyColumn(name = "KEY_COLUMN")
+    @Column(name = "VALUE_COLUMN")
+    private Map<Long, UUID> objectId;
+    @ElementCollection
+    @CollectionTable(name = "T_NAME", joinColumns = @JoinColumn(name = "CLIENT_VER_ID", referencedColumnName = "ID"))
+    @MapKeyColumn(name = "KEY_COLUMN")
+    @Column(name = "VALUE_COLUMN")
+    private Map<Long, String> name;
+    @ElementCollection
+    @CollectionTable(name = "T_CLASS", joinColumns = @JoinColumn(name = "CLIENT_VER_ID", referencedColumnName = "ID"))
+    @MapKeyColumn(name = "KEY_COLUMN")
+    @Column(name = "VALUE_COLUMN")
+    private Map<Long, UUID> classId;
     @Column(name = "COMMENT")
     private String comment;
     @Column(name = "IS_SENT", nullable = false, columnDefinition = "boolean default false")
     private Boolean isSent;
 
     public OutPacket() {
-    }
-
-    public OutPacket(UUID bindId, UUID clientVerId, UUID objectId, UUID firstId, UUID parentId, String name,
-                     String comment) {
-        this.bindId = bindId;
-        this.clientVerId = clientVerId;
-        this.objectId = objectId;
-        this.parentId = parentId;
-        this.name = name;
-        this.comment = comment;
-    }
-
-    public OutPacket(Long id, UUID bindId, UUID clientVerId, UUID objectId, UUID firstId, UUID parentId, String name,
-                     String comment, Boolean isAccepted, Boolean isSent) {
-        this.id = id;
-        this.bindId = bindId;
-        this.clientVerId = clientVerId;
-        this.objectId = objectId;
-        this.parentId = parentId;
-        this.name = name;
-        this.comment = comment;
-        this.isSent = isSent;
     }
 
     public Long getId() {
@@ -81,28 +68,28 @@ public class OutPacket implements Serializable {
         this.clientVerId = clientVerId;
     }
 
-    public UUID getObjectId() {
+    public Map<Long, UUID> getObjectId() {
         return objectId;
     }
 
-    public void setObjectId(UUID objectId) {
+    public void setObjectId(Map<Long, UUID> objectId) {
         this.objectId = objectId;
     }
 
-    public UUID getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(UUID parentId) {
-        this.parentId = parentId;
-    }
-
-    public String getName() {
+    public Map<Long, String> getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(Map<Long, String> name) {
         this.name = name;
+    }
+
+    public Map<Long, UUID> getClassId() {
+        return classId;
+    }
+
+    public void setClassId(Map<Long, UUID> classId) {
+        this.classId = classId;
     }
 
     public String getComment() {
@@ -119,25 +106,5 @@ public class OutPacket implements Serializable {
 
     public void setSent(Boolean sent) {
         isSent = sent;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, bindId, clientVerId, objectId, parentId, name, comment, isSent);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        OutPacket outPacket = (OutPacket) o;
-        return Objects.equals(id, outPacket.id) &&
-                Objects.equals(bindId, outPacket.bindId) &&
-                Objects.equals(clientVerId, outPacket.clientVerId) &&
-                Objects.equals(objectId, outPacket.objectId) &&
-                Objects.equals(parentId, outPacket.parentId) &&
-                Objects.equals(name, outPacket.name) &&
-                Objects.equals(comment, outPacket.comment) &&
-                Objects.equals(isSent, outPacket.isSent);
     }
 }

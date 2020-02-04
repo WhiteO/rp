@@ -1,7 +1,9 @@
 package de.whiteo.rp.util;
 
 import java.util.List;
+
 import org.pcap4j.packet.TcpPacket;
+
 import static org.pcap4j.util.ByteArrays.toHexString;
 
 /**
@@ -16,15 +18,17 @@ public class TcpReassembler {
         for (TcpPacket p : packets) {
             String hexString = toHexString(p.getPayload().getRawData(), "");
             String string = convertHexToString(hexString);
-            stringBuilder.append(string);
+            if (string.startsWith("POST") && !stringBuilder.toString().contains("POST")
+                    && !stringBuilder.toString().endsWith("</crs:call>fS²¦")) {
+                stringBuilder.append(string);
+            }
         }
-        int indexStartXml = stringBuilder.toString().indexOf("<?xml");
-        String resultString = stringBuilder.toString().substring(indexStartXml, stringBuilder.toString().length() - 4);
-        String lastElementsInString = "</crs:comment><crs:features/></crs:params></crs:call>";
+        String lastElementsInString = "</crs:call>fS²¦";
         String stringToReturn = "";
 
-        if (resultString.contains(lastElementsInString)) {
-            stringToReturn = resultString;
+        if (stringBuilder.toString().contains(lastElementsInString)) {
+            int indexStartXml = stringBuilder.toString().indexOf("<?xml");
+            stringToReturn = stringBuilder.toString().substring(indexStartXml, stringBuilder.toString().length() - 4);
         }
         return stringToReturn;
     }

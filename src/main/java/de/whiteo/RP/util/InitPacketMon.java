@@ -1,20 +1,26 @@
 package de.whiteo.rp.util;
 
+import de.whiteo.rp.controller.PacketController;
 import de.whiteo.rp.service.PacketDTO;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.TcpPacket;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -22,9 +28,16 @@ import java.util.UUID;
  * @author Ruslan Tanas {@literal <skyuser13@gmail.com>}
  */
 
+@Component
 public class InitPacketMon {
 
-    public static void run(Packet packet, Map<Integer, TcpSession> sessions) {
+    @Autowired
+    private PacketController packetController;
+
+    public InitPacketMon() {
+    }
+
+    public void run(Packet packet, Map<Integer, TcpSession> sessions) {
         TcpPacket tcp = packet.get(TcpPacket.class);
         int window = tcp.getHeader().getWindowAsInt();
         TcpSession session;
@@ -58,16 +71,14 @@ public class InitPacketMon {
                 processData(packetDTO, documentXml.getElementsByTagName("crs:clientVerID"));
                 processData(packetDTO, documentXml.getElementsByTagName("crs:comment"));
 
-                //document.getElementsByTagName("crs:name").item(0).getAttributes().getNamedItem("value").getTextContent()
-                //document.getElementsByTagName("crs:bind").item(0).getAttributes().getNamedItem("bindID").getTextContent()
-                //document.getElementsByTagName("crs:id").item(0).getAttributes().getNamedItem("value").getTextContent()
-                //document.getElementsByTagName("crs:clientVerID").item(0).getAttributes().getNamedItem("value").getTextContent()
-                //document.getElementsByTagName("crs:comment").item(0).getTextContent()
+                packetController.addPacket(packetDTO);
+
+                sessions.clear();
             }
         }
     }
 
-    private static Document stringXmlToDocumentConvert(String stringXml) {
+    private Document stringXmlToDocumentConvert(String stringXml) {
         Document document = null;
         try {
             String preparedString = prepareXmlString(stringXml);
@@ -85,31 +96,54 @@ public class InitPacketMon {
         return document;
     }
 
-    private static String prepareXmlString(String stringXml) {
+    private String prepareXmlString(String stringXml) {
         return new String(stringXml.getBytes(StandardCharsets.ISO_8859_1));
     }
 
-    private static void processData(PacketDTO packetDTO, NodeList nodesList) {
+    private void processData(PacketDTO packetDTO, NodeList nodesList) {
         for (int i = 0; i < nodesList.getLength(); i++) {
             Element item = (Element) nodesList.item(i);
+            Long verNumItem = 0L;
 
+
+            if (nodesList.item(0).getNodeName().equals("crs:clientVerID")) {
+                packetDTO.setClientVerId(UUID.fromString(item.getAttributes()
+                        .getNamedItem("value").getTextContent()));
+            }
+            if (item.getNodeName().equals("crs:comment")) {
+                packetDTO.setComment(item.getTextContent());
+            }
             if (item.getNextSibling().getNodeName().equals("crs:name")) {
+                Map<Long, String> nameVerNumMap = new HashMap<>();
+
                 String nameItem = item.getNextSibling().getAttributes().getNamedItem("value").getTextContent();
-            } else if (item.getNextSibling().getNextSibling().getNextSibling().getNodeName().equals("crs:verNum")) {
-                Long verNumItem = Long.parseLong(item.getNextSibling().getNextSibling().getNextSibling().getTextContent());
+                if (item.getNextSibling().getNextSibling().getNextSibling().getNodeName().equals("crs:verNum")) {
+                    verNumItem = Long.parseLong(item.getNextSibling().getNextSibling()
+                            .getNextSibling().getTextContent());
+                }
+                nameVerNumMap.put(verNumItem, nameItem);
+                packetDTO.setName(nameVerNumMap);
             }
 
-            //UUID bindId = UUID.fromString(item.getNextSibling().getAttributes().getNamedItem("bindID").getTextContent());
-
+            if (item.getNodeName().equals("crs:bind")) {
+                packetDTO.setBindID(UUID.fromString(item.getAttributes().getNamedItem("bindID").getTextContent()));
+            }
 
             NodeList itemsChildNodes = item.getChildNodes();
             for (int j = 0; j < itemsChildNodes.getLength(); j++) {
                 Node childNode = itemsChildNodes.item(j);
 
                 if (childNode.getNodeName().equals("crs:id")) {
+                    Map<Long, UUID> objIdVerNumMap = new HashMap<>();
                     UUID objectId = UUID.fromString(childNode.getAttributes().getNamedItem("value").getTextContent());
-                } else if (childNode.getNodeName().equals("crs:classID")) {
+                    objIdVerNumMap.put(verNumItem, objectId);
+                    packetDTO.setObjectId(objIdVerNumMap);
+                }
+                if (childNode.getNodeName().equals("crs:classID")) {
+                    Map<Long, UUID> classIdVerNumMap = new HashMap<>();
                     UUID classId = UUID.fromString(childNode.getAttributes().getNamedItem("value").getTextContent());
+                    classIdVerNumMap.put(verNumItem, classId);
+                    packetDTO.setClassId(classIdVerNumMap);
                 }
             }
         }

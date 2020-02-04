@@ -10,7 +10,6 @@ import java.util.List;
 
 public interface PacketService {
     List<OutPacket> getPackets();
-
-    void addPacket(OutPacket outPacket);
-    //void updatePacket(bindOutPacket outPacket);
+    void addPacket(PacketDTO packetDTO);
+    void updatePackets(List<OutPacket> outPacketList);
 }

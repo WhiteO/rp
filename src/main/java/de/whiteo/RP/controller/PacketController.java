@@ -1,11 +1,12 @@
 package de.whiteo.rp.controller;
 
 import de.whiteo.rp.model.OutPacket;
+import de.whiteo.rp.service.PacketDTO;
 import de.whiteo.rp.service.PacketService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
 
 /**
@@ -20,14 +21,12 @@ public class PacketController {
 
     @GetMapping("/api/getPackets")
     public List<OutPacket> getPacket() {
-        return packetService.getPackets();
+        List<OutPacket> outPacketList = packetService.getPackets();
+        packetService.updatePackets(outPacketList);
+        return outPacketList;
     }
 
-    public void addPacket(OutPacket outPacket) {
-        packetService.addPacket(outPacket);
+    public void addPacket(PacketDTO packetDTO) {
+        packetService.addPacket(packetDTO);
     }
-
-    /*public void updatePacket(OutPacket outPacket) {
-        packetService.updatePacket(outPacket);
-    }*/
 }

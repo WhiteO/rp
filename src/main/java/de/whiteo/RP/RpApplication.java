@@ -10,16 +10,12 @@ import org.pcap4j.core.Pcaps;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 @SpringBootApplication
 public class RpApplication {
 
-    //static ConcurrentHashMap<Integer, String> map = new ConcurrentHashMap<Integer, String>();
     static Map<Integer, TcpSession> sessions = new HashMap<Integer, TcpSession>();
 
     public static void main(String[] args) throws PcapNativeException {
@@ -30,7 +26,7 @@ public class RpApplication {
         final int MAX_PACKETS = 2000;
 
         final PcapNetworkInterface device = Pcaps.getDevByName(DEVICE_NAME);
-        final PacketListener listener = packet -> InitPacketMon.run(packet, sessions);
+        final PacketListener listener = packet -> new InitPacketMon().run(packet, sessions);
 
         new PacketLoop(device, listener, handle -> {
             try {
