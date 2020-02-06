@@ -18,8 +18,8 @@ public class TcpReassembler {
         for (TcpPacket p : packets) {
             String hexString = toHexString(p.getPayload().getRawData(), "");
             String string = convertHexToString(hexString);
-            if (string.startsWith("POST") && !stringBuilder.toString().contains("POST")
-                    && !stringBuilder.toString().endsWith("</crs:call>fS²¦")) {
+            if ((string.startsWith("POST") && !stringBuilder.toString().contains("POST"))
+                    || !stringBuilder.toString().endsWith("</crs:call>fS²¦")) {
                 stringBuilder.append(string);
             }
         }

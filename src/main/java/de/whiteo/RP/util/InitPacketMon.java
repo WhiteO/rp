@@ -63,7 +63,7 @@ public class InitPacketMon {
 
                 PacketDTO packetDTO = new PacketDTO();
 
-                processData(packetDTO, documentXml.getElementsByTagName("crs:_super"));
+                processData(packetDTO, documentXml.getElementsByTagName("crs:params"));
                 processData(packetDTO, documentXml.getElementsByTagName("crs:bind"));
                 processData(packetDTO, documentXml.getElementsByTagName("crs:clientVerID"));
                 processData(packetDTO, documentXml.getElementsByTagName("crs:comment"));
@@ -102,7 +102,7 @@ public class InitPacketMon {
     private void processData(PacketDTO packetDTO, NodeList nodesList) {
         for (int i = 0; i < nodesList.getLength(); i++) {
             Element item = (Element) nodesList.item(i);
-            Long verNumItem = 0L;
+            String verNumItem = "";
 
 
             if (nodesList.item(0).getNodeName().equals("crs:clientVerID")) {
@@ -113,12 +113,12 @@ public class InitPacketMon {
                 packetDTO.setComment(item.getTextContent());
             }
             if (item.getNextSibling().getNodeName().equals("crs:name")) {
-                Map<Long, String> nameVerNumMap = new HashMap<>();
+                Map<String, String> nameVerNumMap = new HashMap<>();
 
                 String nameItem = item.getNextSibling().getAttributes().getNamedItem("value").getTextContent();
                 if (item.getNextSibling().getNextSibling().getNextSibling().getNodeName().equals("crs:verNum")) {
-                    verNumItem = Long.parseLong(item.getNextSibling().getNextSibling()
-                            .getNextSibling().getTextContent());
+                    verNumItem = item.getNextSibling().getNextSibling()
+                            .getNextSibling().getTextContent();
                 }
                 nameVerNumMap.put(verNumItem, nameItem);
                 packetDTO.setNameMap(nameVerNumMap);
@@ -133,13 +133,13 @@ public class InitPacketMon {
                 Node childNode = itemsChildNodes.item(j);
 
                 if (childNode.getNodeName().equals("crs:id")) {
-                    Map<Long, UUID> objIdVerNumMap = new HashMap<>();
+                    Map<String, UUID> objIdVerNumMap = new HashMap<>();
                     UUID objectId = UUID.fromString(childNode.getAttributes().getNamedItem("value").getTextContent());
                     objIdVerNumMap.put(verNumItem, objectId);
                     packetDTO.setObjectIdMap(objIdVerNumMap);
                 }
                 if (childNode.getNodeName().equals("crs:classID")) {
-                    Map<Long, UUID> classIdVerNumMap = new HashMap<>();
+                    Map<String, UUID> classIdVerNumMap = new HashMap<>();
                     UUID classId = UUID.fromString(childNode.getAttributes().getNamedItem("value").getTextContent());
                     classIdVerNumMap.put(verNumItem, classId);
                     packetDTO.setClassIdMap(classIdVerNumMap);

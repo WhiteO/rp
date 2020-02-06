@@ -31,25 +31,25 @@ public class OutPacket implements Serializable {
     @GenericGenerator(name = "UUID", strategy = "uuid2")
     @CollectionTable(name = "T_OBJECT", joinColumns = @JoinColumn(name = "CLIENT_VER_ID",
             columnDefinition = "UUID", referencedColumnName = "CLIENT_VER_ID"))
-    @MapKeyColumn(name = "KEY_COLUMN", columnDefinition = "LONG")
+    @MapKeyColumn(name = "KEY_COLUMN", columnDefinition = "CHAR(40)")
     @Column(name = "VALUE_COLUMN", columnDefinition = "UUID")
-    private Map<Long, UUID> objectIdMap;
+    private Map<String, UUID> objectIdMap;
     @ElementCollection
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "uuid2")
     @CollectionTable(name = "T_NAME", joinColumns = @JoinColumn(name = "CLIENT_VER_ID",
             columnDefinition = "UUID", referencedColumnName = "CLIENT_VER_ID"))
-    @MapKeyColumn(name = "KEY_COLUMN", columnDefinition = "LONG")
+    @MapKeyColumn(name = "KEY_COLUMN", columnDefinition = "CHAR(40)")
     @Column(name = "VALUE_COLUMN", columnDefinition = "VARCHAR(255)")
-    private Map<Long, String> nameMap;
+    private Map<String, String> nameMap;
     @ElementCollection
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "uuid2")
     @CollectionTable(name = "T_CLASS", joinColumns = @JoinColumn(name = "CLIENT_VER_ID",
             columnDefinition = "UUID", referencedColumnName = "CLIENT_VER_ID"))
-    @MapKeyColumn(name = "KEY_COLUMN", columnDefinition = "LONG")
+    @MapKeyColumn(name = "KEY_COLUMN", columnDefinition = "CHAR(40)")
     @Column(name = "VALUE_COLUMN", columnDefinition = "UUID")
-    private Map<Long, UUID> classIdMap;
+    private Map<String, UUID> classIdMap;
     @Column(name = "COMMENT", columnDefinition = "VARCHAR(255)")
     private String comment;
     @Column(name = "IS_SENT", nullable = false, columnDefinition = "BOOLEAN default false")
@@ -78,27 +78,27 @@ public class OutPacket implements Serializable {
         this.clientVerId = clientVerId;
     }
 
-    public Map<Long, UUID> getObjectIdMap() {
+    public Map<String, UUID> getObjectIdMap() {
         return objectIdMap;
     }
 
-    public void setObjectIdMap(Map<Long, UUID> objectIdMap) {
+    public void setObjectIdMap(Map<String, UUID> objectIdMap) {
         this.objectIdMap = objectIdMap;
     }
 
-    public Map<Long, String> getNameMap() {
+    public Map<String, String> getNameMap() {
         return nameMap;
     }
 
-    public void setNameMap(Map<Long, String> nameMap) {
+    public void setNameMap(Map<String, String> nameMap) {
         this.nameMap = nameMap;
     }
 
-    public Map<Long, UUID> getClassIdMap() {
+    public Map<String, UUID> getClassIdMap() {
         return classIdMap;
     }
 
-    public void setClassIdMap(Map<Long, UUID> classIdMap) {
+    public void setClassIdMap(Map<String, UUID> classIdMap) {
         this.classIdMap = classIdMap;
     }
 

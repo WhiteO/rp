@@ -52,7 +52,7 @@ public class PacketServiceImpl implements PacketService {
 
         List<UUID> uuidsListToDeleteFromMaps = new ArrayList<>();
 
-        for (Map.Entry<Long, UUID> entry : packetDTO.getClassIdMap().entrySet()) {
+        for (Map.Entry<String, UUID> entry : packetDTO.getClassIdMap().entrySet()) {
             if (0 != packetRepository.countByKeyColumn(entry.getKey())) {
                 uuidsListToDeleteFromMaps.add(entry.getValue());
             }
@@ -65,7 +65,7 @@ public class PacketServiceImpl implements PacketService {
 
         List<String> stringsListToDeleteFromMaps = new ArrayList<>();
 
-        for (Map.Entry<Long, String> entry : packetDTO.getNameMap().entrySet()) {
+        for (Map.Entry<String, String> entry : packetDTO.getNameMap().entrySet()) {
             if (0 != packetRepository.countByKeyColumn(entry.getKey())) {
                 stringsListToDeleteFromMaps.add(entry.getValue());
             }

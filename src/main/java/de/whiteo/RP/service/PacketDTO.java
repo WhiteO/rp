@@ -10,9 +10,9 @@ import java.util.UUID;
 
 public class PacketDTO {
 
-    private Map<Long, UUID> objectIdMap;
-    private Map<Long, UUID> classIdMap;
-    private Map<Long, String> nameMap;
+    private Map<String, UUID> objectIdMap;
+    private Map<String, UUID> classIdMap;
+    private Map<String, String> nameMap;
     private UUID bindID;
     private UUID clientVerId;
     private String comment;
@@ -22,7 +22,7 @@ public class PacketDTO {
         isSent = false;
     }
 
-    public PacketDTO(Map<Long, UUID> objectIdMap, Map<Long, UUID> classIdMap, Map<Long, String> nameMap, UUID bindID, UUID clientVerId, String comment, Boolean isSent) {
+    public PacketDTO(Map<String, UUID> objectIdMap, Map<String, UUID> classIdMap, Map<String, String> nameMap, UUID bindID, UUID clientVerId, String comment, Boolean isSent) {
         this.objectIdMap = objectIdMap;
         this.classIdMap = classIdMap;
         this.nameMap = nameMap;
@@ -32,27 +32,27 @@ public class PacketDTO {
         this.isSent = isSent;
     }
 
-    public Map<Long, UUID> getObjectIdMap() {
+    public Map<String, UUID> getObjectIdMap() {
         return objectIdMap;
     }
 
-    public void setObjectIdMap(Map<Long, UUID> objectIdMap) {
+    public void setObjectIdMap(Map<String, UUID> objectIdMap) {
         this.objectIdMap = objectIdMap;
     }
 
-    public Map<Long, UUID> getClassIdMap() {
+    public Map<String, UUID> getClassIdMap() {
         return classIdMap;
     }
 
-    public void setClassIdMap(Map<Long, UUID> classIdMap) {
+    public void setClassIdMap(Map<String, UUID> classIdMap) {
         this.classIdMap = classIdMap;
     }
 
-    public Map<Long, String> getNameMap() {
+    public Map<String, String> getNameMap() {
         return nameMap;
     }
 
-    public void setNameMap(Map<Long, String> nameMap) {
+    public void setNameMap(Map<String, String> nameMap) {
         this.nameMap = nameMap;
     }
 
