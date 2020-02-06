@@ -1,14 +1,11 @@
 package de.whiteo.rp.util;
 
+import de.whiteo.rp.config.SpringContext;
 import de.whiteo.rp.controller.PacketController;
 import de.whiteo.rp.service.PacketDTO;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.TcpPacket;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
+import org.springframework.context.ApplicationContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -28,13 +25,13 @@ import java.util.UUID;
  * @author Ruslan Tanas {@literal <skyuser13@gmail.com>}
  */
 
-@Component
 public class InitPacketMon {
 
-    @Autowired
     private PacketController packetController;
 
     public InitPacketMon() {
+        ApplicationContext context = SpringContext.getAppContext();
+        packetController = (PacketController)context.getBean("packetController");
     }
 
     public void run(Packet packet, Map<Integer, TcpSession> sessions) {

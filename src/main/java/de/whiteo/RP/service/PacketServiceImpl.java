@@ -3,8 +3,8 @@ package de.whiteo.rp.service;
 import de.whiteo.rp.model.OutPacket;
 import de.whiteo.rp.repository.PacketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -51,7 +51,7 @@ public class PacketServiceImpl implements PacketService {
         List<UUID> listToDeleteFromMaps = new ArrayList<>();
 
         for (Map.Entry<Long, UUID> entry : packetDTO.getClassId().entrySet()) {
-            if (packetRepository.existsByKeyColumn(entry.getKey())) {
+            if (0 != packetRepository.existsByKeyColumn(entry.getKey())) {
                 listToDeleteFromMaps.add(entry.getValue());
             }
         }

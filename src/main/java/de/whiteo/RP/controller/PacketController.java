@@ -4,7 +4,6 @@ import de.whiteo.rp.model.OutPacket;
 import de.whiteo.rp.service.PacketDTO;
 import de.whiteo.rp.service.PacketService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
