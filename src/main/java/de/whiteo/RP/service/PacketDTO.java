@@ -1,7 +1,6 @@
 package de.whiteo.rp.service;
 
 import de.whiteo.rp.model.OutPacket;
-
 import java.util.Map;
 import java.util.UUID;
 
@@ -11,9 +10,9 @@ import java.util.UUID;
 
 public class PacketDTO {
 
-    private Map<Long, UUID> objectId;
-    private Map<Long, UUID> classId;
-    private Map<Long, String> name;
+    private Map<Long, UUID> objectIdMap;
+    private Map<Long, UUID> classIdMap;
+    private Map<Long, String> nameMap;
     private UUID bindID;
     private UUID clientVerId;
     private String comment;
@@ -23,38 +22,38 @@ public class PacketDTO {
         isSent = false;
     }
 
-    public PacketDTO(Map<Long, UUID> objectId, Map<Long, UUID> classId, Map<Long, String> name, UUID bindID, UUID clientVerId, String comment, Boolean isSent) {
-        this.objectId = objectId;
-        this.classId = classId;
-        this.name = name;
+    public PacketDTO(Map<Long, UUID> objectIdMap, Map<Long, UUID> classIdMap, Map<Long, String> nameMap, UUID bindID, UUID clientVerId, String comment, Boolean isSent) {
+        this.objectIdMap = objectIdMap;
+        this.classIdMap = classIdMap;
+        this.nameMap = nameMap;
         this.bindID = bindID;
         this.clientVerId = clientVerId;
         this.comment = comment;
         this.isSent = isSent;
     }
 
-    public Map<Long, UUID> getObjectId() {
-        return objectId;
+    public Map<Long, UUID> getObjectIdMap() {
+        return objectIdMap;
     }
 
-    public void setObjectId(Map<Long, UUID> objectId) {
-        this.objectId = objectId;
+    public void setObjectIdMap(Map<Long, UUID> objectIdMap) {
+        this.objectIdMap = objectIdMap;
     }
 
-    public Map<Long, UUID> getClassId() {
-        return classId;
+    public Map<Long, UUID> getClassIdMap() {
+        return classIdMap;
     }
 
-    public void setClassId(Map<Long, UUID> classId) {
-        this.classId = classId;
+    public void setClassIdMap(Map<Long, UUID> classIdMap) {
+        this.classIdMap = classIdMap;
     }
 
-    public Map<Long, String> getName() {
-        return name;
+    public Map<Long, String> getNameMap() {
+        return nameMap;
     }
 
-    public void setName(Map<Long, String> name) {
-        this.name = name;
+    public void setNameMap(Map<Long, String> nameMap) {
+        this.nameMap = nameMap;
     }
 
     public UUID getBindID() {
@@ -92,12 +91,12 @@ public class PacketDTO {
     public OutPacket convertToOutPacket() {
         OutPacket outPacket = new OutPacket();
         outPacket.setSent(this.getSent());
-        outPacket.setName(this.getName());
-        outPacket.setClassId(this.getClassId());
+        outPacket.setNameMap(this.getNameMap());
+        outPacket.setClassIdMap(this.getClassIdMap());
         outPacket.setBindId(this.getBindID());
         outPacket.setClientVerId(this.getClientVerId());
         outPacket.setComment(this.getComment());
-        outPacket.setObjectId(this.getObjectId());
+        outPacket.setObjectIdMap(this.getObjectIdMap());
         return outPacket;
     }
 }

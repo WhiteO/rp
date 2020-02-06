@@ -31,7 +31,7 @@ public class InitPacketMon {
 
     public InitPacketMon() {
         ApplicationContext context = SpringContext.getAppContext();
-        packetController = (PacketController)context.getBean("packetController");
+        packetController = (PacketController) context.getBean("packetController");
     }
 
     public void run(Packet packet, Map<Integer, TcpSession> sessions) {
@@ -68,7 +68,9 @@ public class InitPacketMon {
                 processData(packetDTO, documentXml.getElementsByTagName("crs:clientVerID"));
                 processData(packetDTO, documentXml.getElementsByTagName("crs:comment"));
 
-                packetController.addPacket(packetDTO);
+                if (null != packetDTO.getClientVerId()) {
+                    packetController.addPacket(packetDTO);
+                }
 
                 sessions.clear();
             }
@@ -119,7 +121,7 @@ public class InitPacketMon {
                             .getNextSibling().getTextContent());
                 }
                 nameVerNumMap.put(verNumItem, nameItem);
-                packetDTO.setName(nameVerNumMap);
+                packetDTO.setNameMap(nameVerNumMap);
             }
 
             if (item.getNodeName().equals("crs:bind")) {
@@ -134,13 +136,13 @@ public class InitPacketMon {
                     Map<Long, UUID> objIdVerNumMap = new HashMap<>();
                     UUID objectId = UUID.fromString(childNode.getAttributes().getNamedItem("value").getTextContent());
                     objIdVerNumMap.put(verNumItem, objectId);
-                    packetDTO.setObjectId(objIdVerNumMap);
+                    packetDTO.setObjectIdMap(objIdVerNumMap);
                 }
                 if (childNode.getNodeName().equals("crs:classID")) {
                     Map<Long, UUID> classIdVerNumMap = new HashMap<>();
                     UUID classId = UUID.fromString(childNode.getAttributes().getNamedItem("value").getTextContent());
                     classIdVerNumMap.put(verNumItem, classId);
-                    packetDTO.setClassId(classIdVerNumMap);
+                    packetDTO.setClassIdMap(classIdVerNumMap);
                 }
             }
         }

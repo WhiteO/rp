@@ -1,7 +1,6 @@
 package de.whiteo.rp.model;
 
-import org.hibernate.annotations.Type;
-
+import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Map;
@@ -19,29 +18,39 @@ public class OutPacket implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "uuid2")
     @Column(name = "BIND_ID", columnDefinition = "UUID")
     private UUID bindId;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "uuid2")
     @Column(name = "CLIENT_VER_ID", columnDefinition = "UUID")
     private UUID clientVerId;
     @ElementCollection
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "uuid2")
     @CollectionTable(name = "T_OBJECT", joinColumns = @JoinColumn(name = "CLIENT_VER_ID",
-            columnDefinition = "UUID", referencedColumnName = "ID"))
+            columnDefinition = "UUID", referencedColumnName = "CLIENT_VER_ID"))
     @MapKeyColumn(name = "KEY_COLUMN", columnDefinition = "LONG")
     @Column(name = "VALUE_COLUMN", columnDefinition = "UUID")
-    private Map<Long, UUID> objectId;
+    private Map<Long, UUID> objectIdMap;
     @ElementCollection
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "uuid2")
     @CollectionTable(name = "T_NAME", joinColumns = @JoinColumn(name = "CLIENT_VER_ID",
-            columnDefinition = "UUID", referencedColumnName = "ID"))
+            columnDefinition = "UUID", referencedColumnName = "CLIENT_VER_ID"))
     @MapKeyColumn(name = "KEY_COLUMN", columnDefinition = "LONG")
-    @Column(name = "VALUE_COLUMN", columnDefinition = "UUID")
-    private Map<Long, String> name;
+    @Column(name = "VALUE_COLUMN", columnDefinition = "VARCHAR(255)")
+    private Map<Long, String> nameMap;
     @ElementCollection
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "uuid2")
     @CollectionTable(name = "T_CLASS", joinColumns = @JoinColumn(name = "CLIENT_VER_ID",
-            columnDefinition = "UUID", referencedColumnName = "ID"))
+            columnDefinition = "UUID", referencedColumnName = "CLIENT_VER_ID"))
     @MapKeyColumn(name = "KEY_COLUMN", columnDefinition = "LONG")
     @Column(name = "VALUE_COLUMN", columnDefinition = "UUID")
-    private Map<Long, UUID> classId;
-    @Column(name = "COMMENT")
+    private Map<Long, UUID> classIdMap;
+    @Column(name = "COMMENT", columnDefinition = "VARCHAR(255)")
     private String comment;
     @Column(name = "IS_SENT", nullable = false, columnDefinition = "BOOLEAN default false")
     private Boolean isSent;
@@ -51,10 +60,6 @@ public class OutPacket implements Serializable {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public UUID getBindId() {
@@ -73,28 +78,28 @@ public class OutPacket implements Serializable {
         this.clientVerId = clientVerId;
     }
 
-    public Map<Long, UUID> getObjectId() {
-        return objectId;
+    public Map<Long, UUID> getObjectIdMap() {
+        return objectIdMap;
     }
 
-    public void setObjectId(Map<Long, UUID> objectId) {
-        this.objectId = objectId;
+    public void setObjectIdMap(Map<Long, UUID> objectIdMap) {
+        this.objectIdMap = objectIdMap;
     }
 
-    public Map<Long, String> getName() {
-        return name;
+    public Map<Long, String> getNameMap() {
+        return nameMap;
     }
 
-    public void setName(Map<Long, String> name) {
-        this.name = name;
+    public void setNameMap(Map<Long, String> nameMap) {
+        this.nameMap = nameMap;
     }
 
-    public Map<Long, UUID> getClassId() {
-        return classId;
+    public Map<Long, UUID> getClassIdMap() {
+        return classIdMap;
     }
 
-    public void setClassId(Map<Long, UUID> classId) {
-        this.classId = classId;
+    public void setClassIdMap(Map<Long, UUID> classIdMap) {
+        this.classIdMap = classIdMap;
     }
 
     public String getComment() {

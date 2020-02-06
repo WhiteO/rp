@@ -13,5 +13,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PacketRepository extends JpaRepository<OutPacket, Long> {
     @Query(value = "select COUNT(*) from T_CLASS where KEY_COLUMN= :key", nativeQuery = true)
-    public Integer existsByKeyColumn(@Param("key") Long key);
+    public Integer countByKeyColumn(@Param("key") Long key);
 }

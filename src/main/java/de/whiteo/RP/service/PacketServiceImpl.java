@@ -4,7 +4,6 @@ import de.whiteo.rp.model.OutPacket;
 import de.whiteo.rp.repository.PacketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -26,8 +25,11 @@ public class PacketServiceImpl implements PacketService {
     @PersistenceContext
     private EntityManager em;
 
-    @Autowired
-    private PacketRepository packetRepository;
+    private final PacketRepository packetRepository;
+
+    public PacketServiceImpl(PacketRepository packetRepository) {
+        this.packetRepository = packetRepository;
+    }
 
     @Override
     public List<OutPacket> getPackets() {
@@ -48,18 +50,29 @@ public class PacketServiceImpl implements PacketService {
     @Override
     public void addPacket(PacketDTO packetDTO) {
 
-        List<UUID> listToDeleteFromMaps = new ArrayList<>();
+        List<UUID> uuidsListToDeleteFromMaps = new ArrayList<>();
 
-        for (Map.Entry<Long, UUID> entry : packetDTO.getClassId().entrySet()) {
-            if (0 != packetRepository.existsByKeyColumn(entry.getKey())) {
-                listToDeleteFromMaps.add(entry.getValue());
+        for (Map.Entry<Long, UUID> entry : packetDTO.getClassIdMap().entrySet()) {
+            if (0 != packetRepository.countByKeyColumn(entry.getKey())) {
+                uuidsListToDeleteFromMaps.add(entry.getValue());
             }
         }
 
-        for (int i = 0; i < listToDeleteFromMaps.size(); i++) {
-            packetDTO.getClassId().remove(listToDeleteFromMaps.get(i));
-            packetDTO.getName().remove(listToDeleteFromMaps.get(i));
-            packetDTO.getObjectId().remove(listToDeleteFromMaps.get(i));
+        for (UUID uuidListToDeleteFromMap : uuidsListToDeleteFromMaps) {
+            packetDTO.getClassIdMap().remove(uuidListToDeleteFromMap);
+            packetDTO.getObjectIdMap().remove(uuidListToDeleteFromMap);
+        }
+
+        List<String> stringsListToDeleteFromMaps = new ArrayList<>();
+
+        for (Map.Entry<Long, String> entry : packetDTO.getNameMap().entrySet()) {
+            if (0 != packetRepository.countByKeyColumn(entry.getKey())) {
+                stringsListToDeleteFromMaps.add(entry.getValue());
+            }
+        }
+
+        for (String stringsListToDeleteFromMap : stringsListToDeleteFromMaps) {
+            packetDTO.getNameMap().remove(stringsListToDeleteFromMap);
         }
 
         OutPacket outPacket = packetDTO.convertToOutPacket();
@@ -75,7 +88,7 @@ public class PacketServiceImpl implements PacketService {
     public void updatePackets(List<OutPacket> outPacketList) {
         for (OutPacket op : outPacketList) {
             try {
-                OutPacket outPacket = packetRepository.findById(op.getId()).orElseThrow(() -> new Exception());
+                OutPacket outPacket = packetRepository.findById(op.getId()).orElseThrow(Exception::new);
                 outPacket.setSent(true);
                 packetRepository.save(outPacket);
             } catch (Exception e) {
