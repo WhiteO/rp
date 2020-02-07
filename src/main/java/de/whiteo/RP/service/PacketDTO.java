@@ -26,7 +26,8 @@ public class PacketDTO {
         nameMap = new HashMap<>();
     }
 
-    public PacketDTO(Map<String, UUID> objectIdMap, Map<String, UUID> classIdMap, Map<String, String> nameMap, UUID bindID, UUID clientVerId, String comment, Boolean isSent) {
+    public PacketDTO(Map<String, UUID> objectIdMap, Map<String, UUID> classIdMap, Map<String, String> nameMap,
+                     UUID bindID, UUID clientVerId, String comment, Boolean isSent) {
         this.objectIdMap = objectIdMap;
         this.classIdMap = classIdMap;
         this.nameMap = nameMap;

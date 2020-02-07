@@ -1,6 +1,7 @@
 package de.whiteo.rp.model;
 
 import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Map;
@@ -56,6 +57,17 @@ public class OutPacket implements Serializable {
     private Boolean isSent;
 
     public OutPacket() {
+    }
+
+    public OutPacket(Long id, UUID bindId, UUID clientVerId, Map<String, UUID> objectIdMap, Map<String,
+            UUID> classIdMap, Map<String, String> nameMap, String comment) {
+        this.id = id;
+        this.bindId = bindId;
+        this.clientVerId = clientVerId;
+        this.objectIdMap = objectIdMap;
+        this.classIdMap = classIdMap;
+        this.nameMap = nameMap;
+        this.comment = comment;
     }
 
     public Long getId() {
