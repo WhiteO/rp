@@ -57,21 +57,20 @@ public class InitPacketMon {
 
         if (!packetText.isEmpty()) {
 
-            Document documentXml = stringXmlToDocumentConvert(packetText);
+            Document docXml = stringXmlToDocumentConvert(packetText);
 
-            if (documentXml != null) {
+            if (docXml != null) {
 
                 PacketDTO packetDTO = new PacketDTO();
+                packetDTO.setClientVerId(getClientVerIDFromPacket(docXml.getElementsByTagName("crs:clientVerID")));
+                packetDTO.setBindID(getBindFromPacket(docXml.getElementsByTagName("crs:bind")));
+                packetDTO.setComment(getCommentFromPacket(docXml.getElementsByTagName("crs:comment")));
 
-                processData(packetDTO, documentXml.getElementsByTagName("crs:params"));
-                processData(packetDTO, documentXml.getElementsByTagName("crs:bind"));
-                processData(packetDTO, documentXml.getElementsByTagName("crs:clientVerID"));
-                processData(packetDTO, documentXml.getElementsByTagName("crs:comment"));
+                processData(packetDTO, docXml.getElementsByTagName("crs:changes"));
 
                 if (null != packetDTO.getClientVerId()) {
                     packetController.addPacket(packetDTO);
                 }
-
                 sessions.clear();
             }
         }
@@ -99,52 +98,68 @@ public class InitPacketMon {
         return new String(stringXml.getBytes(StandardCharsets.ISO_8859_1));
     }
 
+    private UUID getClientVerIDFromPacket(NodeList nodesList) {
+        UUID uuidClientVerID = null;
+        if (0 < nodesList.getLength()) {
+            Element item = (Element) nodesList.item(0);
+            uuidClientVerID = UUID.fromString(item.getAttributes()
+                    .getNamedItem("value").getTextContent());
+        }
+        return uuidClientVerID;
+    }
+
+    private UUID getBindFromPacket(NodeList nodesList) {
+        UUID uuidBind = null;
+        if (0 < nodesList.getLength()) {
+            Element item = (Element) nodesList.item(0);
+            uuidBind = UUID.fromString(item.getAttributes().getNamedItem("bindID").getTextContent());
+        }
+        return uuidBind;
+    }
+
+    private String getCommentFromPacket(NodeList nodesList) {
+        String comment = null;
+        if (0 < nodesList.getLength()) {
+            Element item = (Element) nodesList.item(0);
+            comment = item.getTextContent();
+        }
+        return comment;
+    }
+
     private void processData(PacketDTO packetDTO, NodeList nodesList) {
         for (int i = 0; i < nodesList.getLength(); i++) {
             Element item = (Element) nodesList.item(i);
-            String verNumItem = "";
-
-
-            if (nodesList.item(0).getNodeName().equals("crs:clientVerID")) {
-                packetDTO.setClientVerId(UUID.fromString(item.getAttributes()
-                        .getNamedItem("value").getTextContent()));
-            }
-            if (item.getNodeName().equals("crs:comment")) {
-                packetDTO.setComment(item.getTextContent());
-            }
-            if (item.getNextSibling().getNodeName().equals("crs:name")) {
-                Map<String, String> nameVerNumMap = new HashMap<>();
-
-                String nameItem = item.getNextSibling().getAttributes().getNamedItem("value").getTextContent();
-                if (item.getNextSibling().getNextSibling().getNextSibling().getNodeName().equals("crs:verNum")) {
-                    verNumItem = item.getNextSibling().getNextSibling()
-                            .getNextSibling().getTextContent();
-                }
-                nameVerNumMap.put(verNumItem, nameItem);
-                packetDTO.setNameMap(nameVerNumMap);
-            }
-
-            if (item.getNodeName().equals("crs:bind")) {
-                packetDTO.setBindID(UUID.fromString(item.getAttributes().getNamedItem("bindID").getTextContent()));
-            }
 
             NodeList itemsChildNodes = item.getChildNodes();
             for (int j = 0; j < itemsChildNodes.getLength(); j++) {
                 Node childNode = itemsChildNodes.item(j);
 
-                if (childNode.getNodeName().equals("crs:id")) {
-                    Map<String, UUID> objIdVerNumMap = new HashMap<>();
-                    UUID objectId = UUID.fromString(childNode.getAttributes().getNamedItem("value").getTextContent());
-                    objIdVerNumMap.put(verNumItem, objectId);
-                    packetDTO.setObjectIdMap(objIdVerNumMap);
-                }
-                if (childNode.getNodeName().equals("crs:classID")) {
-                    Map<String, UUID> classIdVerNumMap = new HashMap<>();
-                    UUID classId = UUID.fromString(childNode.getAttributes().getNamedItem("value").getTextContent());
-                    classIdVerNumMap.put(verNumItem, classId);
-                    packetDTO.setClassIdMap(classIdVerNumMap);
-                }
+                Map<String, String> tempMap = new HashMap<>();
+                recursivePocketedChildNodes(tempMap, childNode);
+
+                packetDTO.getClassIdMap().put(tempMap.get("verId"), UUID.fromString(tempMap.get("classId")));
+                packetDTO.getObjectIdMap().put(tempMap.get("verId"), UUID.fromString(tempMap.get("objectId")));
+                packetDTO.getNameMap().put(tempMap.get("verId"), tempMap.get("name"));
+            }
+        }
+    }
+
+    private void recursivePocketedChildNodes(Map<String, String> map, Node node) {
+        NodeList childNodes = node.getChildNodes();
+        for (int j = 0; j < childNodes.getLength(); j++) {
+            Node childNode = childNodes.item(j);
+            if (childNode.getNodeName().equals("crs:name") && !map.containsKey("name")) {
+                map.put("name", childNode.getAttributes().getNamedItem("value").getTextContent());
+            } else if (childNode.getNodeName().equals("crs:classID") && !map.containsKey("classId")) {
+                map.put("classId", childNode.getAttributes().getNamedItem("value").getTextContent());
+            } else if (childNode.getNodeName().equals("crs:id") && !map.containsKey("objectId")) {
+                map.put("objectId", childNode.getAttributes().getNamedItem("value").getTextContent());
+            } else if (childNode.getNodeName().equals("crs:verID") && !map.containsKey("verId")) {
+                map.put("verId", childNode.getAttributes().getNamedItem("value").getTextContent());
+            } else {
+                recursivePocketedChildNodes(map, childNode);
             }
         }
     }
 }
+

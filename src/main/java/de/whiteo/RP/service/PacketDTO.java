@@ -1,6 +1,7 @@
 package de.whiteo.rp.service;
 
 import de.whiteo.rp.model.OutPacket;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -20,6 +21,9 @@ public class PacketDTO {
 
     public PacketDTO() {
         isSent = false;
+        objectIdMap = new HashMap<>();
+        classIdMap = new HashMap<>();
+        nameMap = new HashMap<>();
     }
 
     public PacketDTO(Map<String, UUID> objectIdMap, Map<String, UUID> classIdMap, Map<String, String> nameMap, UUID bindID, UUID clientVerId, String comment, Boolean isSent) {
