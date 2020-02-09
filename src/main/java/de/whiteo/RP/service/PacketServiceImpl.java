@@ -2,9 +2,7 @@ package de.whiteo.rp.service;
 
 import de.whiteo.rp.model.OutPacket;
 import de.whiteo.rp.repository.PacketRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -34,7 +32,6 @@ public class PacketServiceImpl implements PacketService {
 
     @Override
     public List<OutPacket> getPackets() {
-
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<OutPacket> outPacketCriteria = cb.createQuery(OutPacket.class);
         Root<OutPacket> outPacketRoot = outPacketCriteria.from(OutPacket.class);
@@ -43,9 +40,10 @@ public class PacketServiceImpl implements PacketService {
                 outPacketRoot.get("classIdMap"), outPacketRoot.get("nameMap"), outPacketRoot.get("comment"));
         Predicate criteria = cb.conjunction();
         Predicate p = cb.equal(outPacketRoot.get("isSent"), false);
-        criteria = cb.and(criteria, p);
+        criteria = cb.and(criteria);
         outPacketCriteria.where(criteria);
         return em.createQuery(outPacketCriteria).getResultList();
+        //return packetRepository.getAllPackets();
     }
 
     @Override
