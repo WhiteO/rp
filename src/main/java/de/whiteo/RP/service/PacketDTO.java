@@ -2,6 +2,7 @@ package de.whiteo.rp.service;
 
 import de.whiteo.rp.model.OutPacket;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -22,6 +23,7 @@ public class PacketDTO {
     private String user;
     private Map<String, Integer> actionMap;
     private Map<String, Boolean> removedMap;
+    private LocalDateTime date;
 
     public PacketDTO() {
         sent = false;
@@ -30,10 +32,11 @@ public class PacketDTO {
         nameMap = new HashMap<>();
         actionMap = new HashMap<>();
         removedMap = new HashMap<>();
+        date = LocalDateTime.now();
     }
 
     public PacketDTO(Map<String, UUID> objectIdMap, Map<String, UUID> classIdMap,
-                     Map<String, String> nameMap, UUID bindID, UUID clientVerId, String comment,
+                     Map<String, String> nameMap, UUID bindID, UUID clientVerId, String comment, LocalDateTime date,
                      Boolean sent, String user, Map<String, Integer> actionMap, Map<String, Boolean> removedMap) {
         this.objectIdMap = objectIdMap;
         this.classIdMap = classIdMap;
@@ -45,6 +48,15 @@ public class PacketDTO {
         this.removedMap = removedMap;
         this.user = user;
         this.actionMap = actionMap;
+        this.date = date;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 
     public String getUser() {
@@ -139,6 +151,7 @@ public class PacketDTO {
         outPacket.setUser(this.getUser());
         outPacket.setActionMap(this.getActionMap());
         outPacket.setRemovedMap(this.getRemovedMap());
+        outPacket.setDate(this.date);
         return outPacket;
     }
 }

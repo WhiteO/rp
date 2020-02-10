@@ -6,6 +6,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -73,13 +74,15 @@ public class OutPacket implements Serializable {
     private String comment;
     @Column(name = "SENT", nullable = false, columnDefinition = "BOOLEAN default false")
     private Boolean sent;
+    @Column(name = "DATE", columnDefinition = "DATETIME")
+    private LocalDateTime date;
 
     public OutPacket() {
     }
 
     public OutPacket(Long id, UUID bindId, UUID clientVerId, Map<String, UUID> objectIdMap,
-                     Map<String, UUID> classIdMap, Map<String, String> nameMap, String comment,
-                     String user, Map<String, Integer> actionMap, Map<String, Boolean> removedMap) {
+                     Map<String, UUID> classIdMap, Map<String, String> nameMap, String comment, String user,
+                     Map<String, Integer> actionMap, Map<String, Boolean> removedMap, LocalDateTime date) {
         this.id = id;
         this.bindId = bindId;
         this.clientVerId = clientVerId;
@@ -90,6 +93,16 @@ public class OutPacket implements Serializable {
         this.user = user;
         this.actionMap = actionMap;
         this.removedMap = removedMap;
+        this.date = date;
+    }
+
+    @JsonProperty("DATE")
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 
     public Long getId() {
@@ -201,12 +214,13 @@ public class OutPacket implements Serializable {
                 Objects.equals(user, outPacket.user) &&
                 Objects.equals(actionMap, outPacket.actionMap) &&
                 Objects.equals(removedMap, outPacket.removedMap) &&
+                Objects.equals(date, outPacket.date) &&
                 Objects.equals(sent, outPacket.sent);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id, bindId, clientVerId, objectIdMap, classIdMap,
-                nameMap, comment, user, actionMap, removedMap, sent);
+                nameMap, comment, user, actionMap, removedMap, sent, date);
     }
 }
