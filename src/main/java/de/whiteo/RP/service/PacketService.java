@@ -13,5 +13,7 @@ public interface PacketService {
 
     void addPacket(PacketDTO packetDTO);
 
-    void updatePackets(Set<OutPacket> outPacketList);
+    Integer getPacketsCount();
+
+    void updatePackets(String uuid);
 }

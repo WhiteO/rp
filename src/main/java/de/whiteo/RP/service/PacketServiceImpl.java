@@ -62,15 +62,19 @@ public class PacketServiceImpl implements PacketService {
     }
 
     @Override
-    public void updatePackets(Set<OutPacket> outPacketList) {
-        for (OutPacket op : outPacketList) {
-            try {
-                OutPacket outPacket = packetRepository.findById(op.getId()).orElseThrow(Exception::new);
-                outPacket.setSent(true);
-                //packetRepository.save(outPacket);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+    public Integer getPacketsCount() {
+        return packetRepository.getPacketsCount();
+    }
+
+    @Override
+    public void updatePackets(String uuid) {
+        try {
+            Long packetId = packetRepository.getIdByClientVerId(UUID.fromString(uuid));
+            OutPacket outPacket = packetRepository.findById(packetId).orElseThrow(Exception::new);
+            outPacket.setSent(true);
+            packetRepository.save(outPacket);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

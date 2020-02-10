@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * @author Ruslan Tanas {@literal <skyuser13@gmail.com>}
@@ -14,7 +15,7 @@ import java.util.Set;
 
 @Repository
 public interface PacketRepository extends JpaRepository<OutPacket, Long> {
-    @Query(value = "select COUNT(*) from T_CLASS where KEY_COLUMN= :key", nativeQuery = true)
+    @Query(value = "select COUNT(*) from T_CLASS where KEY_COLUMN = :key", nativeQuery = true)
     Integer countByKeyColumn(@Param("key") String key);
 
     @Query(value = "select distinct P.ID, P.USER USER, P.BIND_ID CLIENT_ID, P.CLIENT_VER_ID PUSH_VER_ID," +
@@ -28,4 +29,9 @@ public interface PacketRepository extends JpaRepository<OutPacket, Long> {
             "where P.SENT=FALSE", nativeQuery = true)
     Set<OutPacket> getAllPackets();
 
+    @Query(value = "select COUNT(*) from PACKETS where SENT = false", nativeQuery = true)
+    Integer getPacketsCount();
+
+    @Query(value = "select P.id from PACKETS P where P.CLIENT_VER_ID = :key", nativeQuery = true)
+    Long getIdByClientVerId(@Param("key") UUID key);
 }

@@ -4,8 +4,7 @@ import de.whiteo.rp.model.OutPacket;
 import de.whiteo.rp.service.PacketDTO;
 import de.whiteo.rp.service.PacketService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
@@ -19,12 +18,22 @@ public class PacketController {
     @Autowired
     private PacketService packetService;
 
-    @GetMapping("/api/getPackets")
-    public Set<OutPacket> getPacket() {
+    @GetMapping("/api/packets/get")
+    public Set<OutPacket> getPackets() {
         return packetService.getPackets();
     }
 
     public void addPacket(PacketDTO packetDTO) {
         packetService.addPacket(packetDTO);
+    }
+
+    @GetMapping("/api/packets/count")
+    public Integer getPacketsCount() {
+        return packetService.getPacketsCount();
+    }
+
+    @PutMapping("/api/packet/update/{id}")
+    public void updatePackets(@PathVariable String uuid) {
+        packetService.updatePackets(uuid);
     }
 }
