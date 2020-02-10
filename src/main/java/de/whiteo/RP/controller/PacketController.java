@@ -6,6 +6,7 @@ import de.whiteo.rp.service.PacketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.util.Set;
 
 /**
@@ -20,9 +21,7 @@ public class PacketController {
 
     @GetMapping("/api/getPackets")
     public Set<OutPacket> getPacket() {
-        Set<OutPacket> outPacketList = packetService.getPackets();
-        packetService.updatePackets(outPacketList);
-        return outPacketList;
+        return packetService.getPackets();
     }
 
     public void addPacket(PacketDTO packetDTO) {

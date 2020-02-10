@@ -1,6 +1,7 @@
 package de.whiteo.rp.service;
 
 import de.whiteo.rp.model.OutPacket;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -17,24 +18,57 @@ public class PacketDTO {
     private UUID bindID;
     private UUID clientVerId;
     private String comment;
-    private Boolean isSent;
+    private Boolean sent;
+    private String user;
+    private Map<String, Integer> actionMap;
+    private Map<String, Boolean> removedMap;
 
     public PacketDTO() {
-        isSent = false;
+        sent = false;
         objectIdMap = new HashMap<>();
         classIdMap = new HashMap<>();
         nameMap = new HashMap<>();
+        actionMap = new HashMap<>();
+        removedMap = new HashMap<>();
     }
 
-    public PacketDTO(Map<String, UUID> objectIdMap, Map<String, UUID> classIdMap, Map<String, String> nameMap,
-                     UUID bindID, UUID clientVerId, String comment, Boolean isSent) {
+    public PacketDTO(Map<String, UUID> objectIdMap, Map<String, UUID> classIdMap,
+                     Map<String, String> nameMap, UUID bindID, UUID clientVerId, String comment,
+                     Boolean sent, String user, Map<String, Integer> actionMap, Map<String, Boolean> removedMap) {
         this.objectIdMap = objectIdMap;
         this.classIdMap = classIdMap;
         this.nameMap = nameMap;
         this.bindID = bindID;
         this.clientVerId = clientVerId;
         this.comment = comment;
-        this.isSent = isSent;
+        this.sent = sent;
+        this.removedMap = removedMap;
+        this.user = user;
+        this.actionMap = actionMap;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public Map<String, Integer> getActionMap() {
+        return actionMap;
+    }
+
+    public void setActionMap(Map<String, Integer> actionMap) {
+        this.actionMap = actionMap;
+    }
+
+    public Map<String, Boolean> getRemovedMap() {
+        return removedMap;
+    }
+
+    public void setRemovedMap(Map<String, Boolean> removedMap) {
+        this.removedMap = removedMap;
     }
 
     public Map<String, UUID> getObjectIdMap() {
@@ -85,23 +119,26 @@ public class PacketDTO {
         this.comment = comment;
     }
 
-    public Boolean getSent() {
-        return isSent;
+    public Boolean isSent() {
+        return sent;
     }
 
     public void setSent(Boolean sent) {
-        isSent = sent;
+        sent = sent;
     }
 
     public OutPacket convertToOutPacket() {
         OutPacket outPacket = new OutPacket();
-        outPacket.setSent(this.getSent());
+        outPacket.setSent(this.isSent());
         outPacket.setNameMap(this.getNameMap());
         outPacket.setClassIdMap(this.getClassIdMap());
         outPacket.setBindId(this.getBindID());
         outPacket.setClientVerId(this.getClientVerId());
         outPacket.setComment(this.getComment());
         outPacket.setObjectIdMap(this.getObjectIdMap());
+        outPacket.setUser(this.getUser());
+        outPacket.setActionMap(this.getActionMap());
+        outPacket.setRemovedMap(this.getRemovedMap());
         return outPacket;
     }
 }

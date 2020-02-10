@@ -12,6 +12,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -62,10 +63,11 @@ public class InitPacketMon {
             if (docXml != null) {
 
                 PacketDTO packetDTO = new PacketDTO();
+
                 packetDTO.setClientVerId(getClientVerIDFromPacket(docXml.getElementsByTagName("crs:clientVerID")));
                 packetDTO.setBindID(getBindFromPacket(docXml.getElementsByTagName("crs:bind")));
                 packetDTO.setComment(getCommentFromPacket(docXml.getElementsByTagName("crs:comment")));
-
+                packetDTO.setUser(getUserFromPacket(docXml.getElementsByTagName("crs:auth")));
                 processData(packetDTO, docXml.getElementsByTagName("crs:changes"));
 
                 if (null != packetDTO.getClientVerId()) {
@@ -126,6 +128,15 @@ public class InitPacketMon {
         return comment;
     }
 
+    private String getUserFromPacket(NodeList nodesList) {
+        String user = null;
+        if (0 < nodesList.getLength()) {
+            Element item = (Element) nodesList.item(0);
+            user = item.getAttributes().getNamedItem("user").getTextContent();
+        }
+        return user;
+    }
+
     private void processData(PacketDTO packetDTO, NodeList nodesList) {
         for (int i = 0; i < nodesList.getLength(); i++) {
             Element item = (Element) nodesList.item(i);
@@ -140,6 +151,8 @@ public class InitPacketMon {
                 packetDTO.getClassIdMap().put(tempMap.get("verId"), UUID.fromString(tempMap.get("classId")));
                 packetDTO.getObjectIdMap().put(tempMap.get("verId"), UUID.fromString(tempMap.get("objectId")));
                 packetDTO.getNameMap().put(tempMap.get("verId"), tempMap.get("name"));
+                packetDTO.getActionMap().put(tempMap.get("verId"), Integer.parseInt(tempMap.get("action")));
+                packetDTO.getRemovedMap().put(tempMap.get("verId"), Boolean.parseBoolean(tempMap.get("removed")));
             }
         }
     }
@@ -156,6 +169,10 @@ public class InitPacketMon {
                 map.put("objectId", childNode.getAttributes().getNamedItem("value").getTextContent());
             } else if (childNode.getNodeName().equals("crs:verID") && !map.containsKey("verId")) {
                 map.put("verId", childNode.getAttributes().getNamedItem("value").getTextContent());
+            } else if (childNode.getNodeName().equals("crs:action") && !map.containsKey("action")) {
+                map.put("action", childNode.getAttributes().getNamedItem("value").getTextContent());
+            } else if (childNode.getNodeName().equals("crs:removed") && !map.containsKey("removed")) {
+                map.put("removed", childNode.getAttributes().getNamedItem("value").getTextContent());
             } else {
                 recursivePocketedChildNodes(map, childNode);
             }

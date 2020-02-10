@@ -1,6 +1,7 @@
 package de.whiteo.rp.service;
 
 import de.whiteo.rp.model.OutPacket;
+
 import java.util.Set;
 
 /**
@@ -9,6 +10,8 @@ import java.util.Set;
 
 public interface PacketService {
     Set<OutPacket> getPackets();
+
     void addPacket(PacketDTO packetDTO);
+
     void updatePackets(Set<OutPacket> outPacketList);
 }
