@@ -3,16 +3,7 @@ package de.whiteo.rp.service;
 import de.whiteo.rp.model.OutPacket;
 import de.whiteo.rp.repository.PacketRepository;
 import org.springframework.stereotype.Service;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author Ruslan Tanas {@literal <skyuser13@gmail.com>}
@@ -21,9 +12,6 @@ import java.util.UUID;
 @Service
 public class PacketServiceImpl implements PacketService {
 
-    @PersistenceContext
-    private EntityManager em;
-
     private final PacketRepository packetRepository;
 
     public PacketServiceImpl(PacketRepository packetRepository) {
@@ -31,19 +19,8 @@ public class PacketServiceImpl implements PacketService {
     }
 
     @Override
-    public List<OutPacket> getPackets() {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<OutPacket> outPacketCriteria = cb.createQuery(OutPacket.class);
-        Root<OutPacket> outPacketRoot = outPacketCriteria.from(OutPacket.class);
-        outPacketCriteria.multiselect(outPacketRoot.get("id"), outPacketRoot.get("bindId"),
-                outPacketRoot.get("clientVerId"), outPacketRoot.get("objectIdMap"),
-                outPacketRoot.get("classIdMap"), outPacketRoot.get("nameMap"), outPacketRoot.get("comment"));
-        Predicate criteria = cb.conjunction();
-        Predicate p = cb.equal(outPacketRoot.get("isSent"), false);
-        criteria = cb.and(criteria);
-        outPacketCriteria.where(criteria);
-        return em.createQuery(outPacketCriteria).getResultList();
-        //return packetRepository.getAllPackets();
+    public Set<OutPacket> getPackets() {
+        return packetRepository.getAllPackets();
     }
 
     @Override
@@ -84,12 +61,12 @@ public class PacketServiceImpl implements PacketService {
     }
 
     @Override
-    public void updatePackets(List<OutPacket> outPacketList) {
+    public void updatePackets(Set<OutPacket> outPacketList) {
         for (OutPacket op : outPacketList) {
             try {
                 OutPacket outPacket = packetRepository.findById(op.getId()).orElseThrow(Exception::new);
                 outPacket.setSent(true);
-                // packetRepository.save(outPacket);
+                //packetRepository.save(outPacket);
             } catch (Exception e) {
                 e.printStackTrace();
             }

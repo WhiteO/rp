@@ -1,9 +1,12 @@
 package de.whiteo.rp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -14,6 +17,7 @@ import java.util.UUID;
 @Table(name = "PACKETS")
 public class OutPacket implements Serializable {
 
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
@@ -26,7 +30,7 @@ public class OutPacket implements Serializable {
     @GenericGenerator(name = "UUID", strategy = "uuid2")
     @Column(name = "CLIENT_VER_ID", columnDefinition = "UUID")
     private UUID clientVerId;
-    @ElementCollection
+    @ElementCollection(fetch=FetchType.EAGER)
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "uuid2")
     @CollectionTable(name = "T_OBJECT", joinColumns = @JoinColumn(name = "CLIENT_VER_ID",
@@ -34,7 +38,7 @@ public class OutPacket implements Serializable {
     @MapKeyColumn(name = "KEY_COLUMN", columnDefinition = "CHAR(40)")
     @Column(name = "VALUE_COLUMN", columnDefinition = "UUID")
     private Map<String, UUID> objectIdMap;
-    @ElementCollection
+    @ElementCollection(fetch=FetchType.EAGER)
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "uuid2")
     @CollectionTable(name = "T_NAME", joinColumns = @JoinColumn(name = "CLIENT_VER_ID",
@@ -42,7 +46,7 @@ public class OutPacket implements Serializable {
     @MapKeyColumn(name = "KEY_COLUMN", columnDefinition = "CHAR(40)")
     @Column(name = "VALUE_COLUMN", columnDefinition = "VARCHAR(255)")
     private Map<String, String> nameMap;
-    @ElementCollection
+    @ElementCollection(fetch=FetchType.EAGER)
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "uuid2")
     @CollectionTable(name = "T_CLASS", joinColumns = @JoinColumn(name = "CLIENT_VER_ID",
@@ -73,6 +77,7 @@ public class OutPacket implements Serializable {
         return id;
     }
 
+    @JsonProperty("CLIENT_ID")
     public UUID getBindId() {
         return bindId;
     }
@@ -81,6 +86,7 @@ public class OutPacket implements Serializable {
         this.bindId = bindId;
     }
 
+    @JsonProperty("PUSH_VER_ID")
     public UUID getClientVerId() {
         return clientVerId;
     }
@@ -89,6 +95,7 @@ public class OutPacket implements Serializable {
         this.clientVerId = clientVerId;
     }
 
+    @JsonProperty("OBJECT_ID")
     public Map<String, UUID> getObjectIdMap() {
         return objectIdMap;
     }
@@ -97,6 +104,7 @@ public class OutPacket implements Serializable {
         this.objectIdMap = objectIdMap;
     }
 
+    @JsonProperty("OBJECT_NAME")
     public Map<String, String> getNameMap() {
         return nameMap;
     }
@@ -105,6 +113,7 @@ public class OutPacket implements Serializable {
         this.nameMap = nameMap;
     }
 
+    @JsonProperty("CLASS_ID")
     public Map<String, UUID> getClassIdMap() {
         return classIdMap;
     }
@@ -113,6 +122,7 @@ public class OutPacket implements Serializable {
         this.classIdMap = classIdMap;
     }
 
+    @JsonProperty("COMMENT")
     public String getComment() {
         return comment;
     }
@@ -121,11 +131,31 @@ public class OutPacket implements Serializable {
         this.comment = comment;
     }
 
+    @JsonIgnore
     public Boolean getSent() {
         return isSent;
     }
 
     public void setSent(Boolean sent) {
         isSent = sent;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OutPacket outPacket = (OutPacket) o;
+        return Objects.equals(id, outPacket.id) &&
+                Objects.equals(bindId, outPacket.bindId) &&
+                Objects.equals(clientVerId, outPacket.clientVerId) &&
+                Objects.equals(objectIdMap, outPacket.objectIdMap) &&
+                Objects.equals(classIdMap, outPacket.classIdMap) &&
+                Objects.equals(nameMap, outPacket.nameMap) &&
+                Objects.equals(comment, outPacket.comment);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, bindId, clientVerId, objectIdMap, classIdMap, nameMap, comment);
     }
 }

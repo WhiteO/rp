@@ -6,7 +6,7 @@ import de.whiteo.rp.service.PacketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author Ruslan Tanas {@literal <skyuser13@gmail.com>}
@@ -19,8 +19,8 @@ public class PacketController {
     private PacketService packetService;
 
     @GetMapping("/api/getPackets")
-    public List<OutPacket> getPacket() {
-        List<OutPacket> outPacketList = packetService.getPackets();
+    public Set<OutPacket> getPacket() {
+        Set<OutPacket> outPacketList = packetService.getPackets();
         packetService.updatePackets(outPacketList);
         return outPacketList;
     }

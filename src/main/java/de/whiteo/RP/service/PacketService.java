@@ -1,15 +1,14 @@
 package de.whiteo.rp.service;
 
 import de.whiteo.rp.model.OutPacket;
-
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author Ruslan Tanas {@literal <skyuser13@gmail.com>}
  */
 
 public interface PacketService {
-    List<OutPacket> getPackets();
+    Set<OutPacket> getPackets();
     void addPacket(PacketDTO packetDTO);
-    void updatePackets(List<OutPacket> outPacketList);
+    void updatePackets(Set<OutPacket> outPacketList);
 }
