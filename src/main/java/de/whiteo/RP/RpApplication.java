@@ -24,17 +24,19 @@ public class RpApplication {
 
         final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(RpApplication.class);
         final String DEVICE_NAME = "\\Device\\NPF_Loopback";
-        final int MAX_PACKETS = 2;
+        final int MAX_PACKETS = 2000;
 
         final PcapNetworkInterface device = Pcaps.getDevByName(DEVICE_NAME);
         final PacketListener listener = packet -> new InitPacketMon().run(packet, sessions);
 
-        new PacketLoop(device, listener, handle -> {
-            try {
-                handle.loop(MAX_PACKETS, listener);
-            } catch (Exception e) {
-                LOGGER.error(e.toString());
-            }
-        }).run();
+        while (true) {
+            new PacketLoop(device, listener, handle -> {
+                try {
+                    handle.loop(MAX_PACKETS, listener);
+                } catch (Exception e) {
+                    LOGGER.error(e.toString());
+                }
+            }).run();
+        }
     }
 }
