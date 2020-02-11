@@ -5,7 +5,6 @@
 [![Code Quality: Java](https://img.shields.io/lgtm/grade/java/g/kaitoy/pcap4j.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/kaitoy/pcap4j/context:java)
 [![Total Alerts](https://img.shields.io/lgtm/alerts/g/kaitoy/pcap4j.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/kaitoy/pcap4j/alerts)
 
-
 [Russian readme](/README_ru.md)
 
 RP
@@ -20,6 +19,7 @@ Contents
     * [System requirements](#system-requirements)
         * [Dependencies](#dependencies)
         * [Platforms](#platforms)
+        * [Others](#others)
 * [How to build](#how-to-build)
 * [Contributing Code](#contributing-code)
 * [License](#license)
@@ -32,6 +32,7 @@ Features
 * Storage packets in DB
 * You can get/update a packet via the API.
 * All in one .jar - ***SOON***
+* Dock - - ***SOON***
 
 How to use
 ----------
@@ -52,7 +53,7 @@ I tested RP on the following OSes with x64 processors.
 
 RP needs administrator/root privileges.
 
-How to build
+How to used
 ------------
 
 1. Install libpcap, WinPcap, or Npcap:
