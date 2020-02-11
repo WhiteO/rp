@@ -20,7 +20,7 @@ Contents
         * [Dependencies](#dependencies)
         * [Platforms](#platforms)
         * [Others](#others)
-* [How to build](#how-to-build)
+* [How to used](#how-to-used)
 * [Contributing Code](#contributing-code)
 * [License](#license)
 * [Contacts](#contacts)
@@ -56,16 +56,11 @@ RP needs administrator/root privileges.
 How to used
 ------------
 
-1. Install libpcap, WinPcap, or Npcap:
+1. Install WinPcap or Npcap:
 
-    Install WinPcap (if Windows).
-    It's needed for the unit tests which are run during a build.
+    Install WinPcap or Npcap.
 
-2. Install JDK:
-
-    Download and install JDK 9, 10, or 11, and set the environment variable ***JAVA_HOME*** properly.
-
-3. Start RP 
+2. Start RP 
 
     Download and start RP.jar. - ***SOON***
 
