@@ -1,4 +1,3 @@
-[![Coverage Status](https://coveralls.io/repos/github/WhiteO/rp/badge.svg)](https://coveralls.io/github/WhiteO/rp)
 [![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/WhiteO/rp.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/WhiteO/rp/context:java)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/WhiteO/rp.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/WhiteO/rp/alerts/)
 
@@ -65,7 +64,7 @@ Contributing Code
 -----------------
 
 1. Fork this repository.
-2. Create a branch from master branch.
+2. Create a branch from dev branch.
 3. Write code.
 4. Send a PR from the branch.
 
