@@ -27,17 +27,17 @@ public class PacketServiceImpl implements PacketService {
     @Override
     public void addPacket(PacketDTO packetDTO) {
 
-        List<UUID> uuidsListToDeleteFromMaps = new ArrayList<>();
+        Set<String> uuidListToDeleteFromMaps = new HashSet<>();
 
         for (Map.Entry<String, UUID> entry : packetDTO.getClassIdMap().entrySet()) {
             if (0 != packetRepository.countByKeyColumn(entry.getKey())) {
-                uuidsListToDeleteFromMaps.add(entry.getValue());
+                uuidListToDeleteFromMaps.add(entry.getValue().toString());
             }
         }
 
-        for (UUID uuidListToDeleteFromMap : uuidsListToDeleteFromMaps) {
-            packetDTO.getClassIdMap().remove(uuidListToDeleteFromMap);
-            packetDTO.getObjectIdMap().remove(uuidListToDeleteFromMap);
+        for (String str : uuidListToDeleteFromMaps) {
+            packetDTO.getClassIdMap().remove(str);
+            packetDTO.getObjectIdMap().remove(str);
         }
 
         List<String> stringsListToDeleteFromMaps = new ArrayList<>();
