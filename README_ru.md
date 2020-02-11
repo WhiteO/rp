@@ -1,9 +1,6 @@
-[![Build Status](https://travis-ci.org/kaitoy/pcap4j.svg?branch=v1)](https://travis-ci.org/kaitoy/pcap4j)
-[![CircleCI](https://circleci.com/gh/kaitoy/pcap4j/tree/v1.svg?style=svg)](https://circleci.com/gh/kaitoy/pcap4j/tree/v1)
-[![Build status](https://ci.appveyor.com/api/projects/status/github/kaitoy/pcap4j?branch=v1&svg=true)](https://ci.appveyor.com/project/kaitoy/pcap4j/branch/v1)
-[![Coverage Status](https://coveralls.io/repos/kaitoy/pcap4j/badge.svg)](https://coveralls.io/r/kaitoy/pcap4j)
-[![Code Quality: Java](https://img.shields.io/lgtm/grade/java/g/kaitoy/pcap4j.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/kaitoy/pcap4j/context:java)
-[![Total Alerts](https://img.shields.io/lgtm/alerts/g/kaitoy/pcap4j.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/kaitoy/pcap4j/alerts)
+[![Coverage Status](https://coveralls.io/repos/github/WhiteO/rp/badge.svg)](https://coveralls.io/github/WhiteO/rp)
+[![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/WhiteO/rp.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/WhiteO/rp/context:java)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/WhiteO/rp.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/WhiteO/rp/alerts/)
 
 [English readme](/README.md)
 
