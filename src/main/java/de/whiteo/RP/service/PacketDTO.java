@@ -136,7 +136,7 @@ public class PacketDTO {
     }
 
     public void setSent(Boolean sent) {
-        sent = sent;
+        this.sent = sent;
     }
 
     public OutPacket convertToOutPacket() {

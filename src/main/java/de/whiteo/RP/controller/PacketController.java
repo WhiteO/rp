@@ -32,8 +32,8 @@ public class PacketController {
         return packetService.getPacketsCount();
     }
 
-    @PutMapping("/api/packet/update/{id}")
-    public void updatePackets(@PathVariable String uuid) {
-        packetService.updatePackets(uuid);
+    @PostMapping("/api/packet/update/{id}")
+    public void updatePackets(@PathVariable String id) {
+        packetService.updatePackets(id);
     }
 }

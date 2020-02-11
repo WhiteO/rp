@@ -11,7 +11,7 @@ import java.util.List;
 
 public final class TcpSession {
 
-    private final List<TcpPacket> packetsList = new ArrayList<TcpPacket>();
+    private final List<TcpPacket> packetsList = new ArrayList<>();
     private long SeqNumOffset;
     private int window;
 

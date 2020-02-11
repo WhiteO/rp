@@ -17,9 +17,11 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
+import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -29,6 +31,8 @@ import java.util.UUID;
 public class InitPacketMon {
 
     private PacketController packetController;
+    private final BigInteger MIN_FOR_RANDOM = new BigInteger("1000000000000000000000000000000");
+    private final BigInteger MAX_FOR_RANDOM = new BigInteger("9000000000000000000000000000000");
 
     public InitPacketMon() {
         ApplicationContext context = SpringContext.getAppContext();
@@ -148,13 +152,29 @@ public class InitPacketMon {
                 Map<String, String> tempMap = new HashMap<>();
                 recursivePocketedChildNodes(tempMap, childNode);
 
-                packetDTO.getClassIdMap().put(tempMap.get("verId"), UUID.fromString(tempMap.get("classId")));
-                packetDTO.getObjectIdMap().put(tempMap.get("verId"), UUID.fromString(tempMap.get("objectId")));
-                packetDTO.getNameMap().put(tempMap.get("verId"), tempMap.get("name"));
-                packetDTO.getActionMap().put(tempMap.get("verId"), Integer.parseInt(tempMap.get("action")));
-                packetDTO.getRemovedMap().put(tempMap.get("verId"), Boolean.parseBoolean(tempMap.get("removed")));
+
+                String verId = null == tempMap.get("verId") ? getRandomVerId() : tempMap.get("verId");
+                packetDTO.getClassIdMap().put(verId, UUID.fromString(tempMap.get("classId")));
+                packetDTO.getObjectIdMap().put(verId, UUID.fromString(tempMap.get("objectId")));
+                packetDTO.getNameMap().put(verId, tempMap.get("name"));
+                Integer actionInt = null == tempMap.get("action") ? 0 : Integer.parseInt(tempMap.get("action"));
+                packetDTO.getActionMap().put(verId, actionInt);
+                packetDTO.getRemovedMap().put(verId, Boolean.parseBoolean(tempMap.get("removed")));
             }
         }
+    }
+
+    private String getRandomVerId() {
+        BigInteger bigInteger = MAX_FOR_RANDOM.subtract(MIN_FOR_RANDOM);
+        Random randNum = new Random();
+        int len = MAX_FOR_RANDOM.bitLength();
+        BigInteger res = new BigInteger(len, randNum);
+        if (res.compareTo(MIN_FOR_RANDOM) < 0)
+            res = res.add(MIN_FOR_RANDOM);
+        if (res.compareTo(bigInteger) >= 0)
+            res = res.mod(bigInteger).add(MIN_FOR_RANDOM);
+        String INIT_VER_ID = "a00000000";
+        return res.toString() + INIT_VER_ID;
     }
 
     private void recursivePocketedChildNodes(Map<String, String> map, Node node) {
