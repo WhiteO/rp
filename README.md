@@ -31,7 +31,7 @@ Features
 * Capturing packets via a network interface.
 * Storage packets in DB
 * You can get/update a packet via the API.
-* All in one .jar
+* All in one .jar - ***SOON***
 
 How to use
 ----------
@@ -66,7 +66,7 @@ How to build
 
 3. Start RP 
 
-    Download and start RP.jar.
+    Download and start RP.jar. - ***SOON***
 
 Contributing Code
 -----------------
