@@ -9,11 +9,12 @@ import java.util.Set;
  */
 
 public interface PacketService {
-    Set<OutPacket> getPackets();
 
-    void addPacket(PacketDTO packetDTO);
+  Set<OutPacket> getPackets();
 
-    Integer getPacketsCount();
+  void addPacket(PacketDTO packetDTO);
 
-    void updatePackets(String uuid);
+  Integer getPacketsCount();
+
+  void updatePackets(String uuid);
 }

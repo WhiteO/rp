@@ -13,68 +13,68 @@ import java.util.*;
 @Service
 public class PacketServiceImpl implements PacketService {
 
-    private final PacketRepository packetRepository;
+  private final PacketRepository packetRepository;
 
-    public PacketServiceImpl(PacketRepository packetRepository) {
-        this.packetRepository = packetRepository;
+  public PacketServiceImpl(PacketRepository packetRepository) {
+    this.packetRepository = packetRepository;
+  }
+
+  @Override
+  public Set<OutPacket> getPackets() {
+    return packetRepository.getAllPackets();
+  }
+
+  @Override
+  public void addPacket(PacketDTO packetDTO) {
+
+    Set<String> uuidListToDeleteFromMaps = new HashSet<>();
+
+    for (Map.Entry<String, UUID> entry : packetDTO.getClassIdMap().entrySet()) {
+      if (0 != packetRepository.countByKeyColumn(entry.getKey())) {
+        uuidListToDeleteFromMaps.add(entry.getValue().toString());
+      }
     }
 
-    @Override
-    public Set<OutPacket> getPackets() {
-        return packetRepository.getAllPackets();
+    for (String str : uuidListToDeleteFromMaps) {
+      packetDTO.getClassIdMap().remove(str);
+      packetDTO.getObjectIdMap().remove(str);
     }
 
-    @Override
-    public void addPacket(PacketDTO packetDTO) {
+    List<String> stringsListToDeleteFromMaps = new ArrayList<>();
 
-        Set<String> uuidListToDeleteFromMaps = new HashSet<>();
-
-        for (Map.Entry<String, UUID> entry : packetDTO.getClassIdMap().entrySet()) {
-            if (0 != packetRepository.countByKeyColumn(entry.getKey())) {
-                uuidListToDeleteFromMaps.add(entry.getValue().toString());
-            }
-        }
-
-        for (String str : uuidListToDeleteFromMaps) {
-            packetDTO.getClassIdMap().remove(str);
-            packetDTO.getObjectIdMap().remove(str);
-        }
-
-        List<String> stringsListToDeleteFromMaps = new ArrayList<>();
-
-        for (Map.Entry<String, String> entry : packetDTO.getNameMap().entrySet()) {
-            if (0 != packetRepository.countByKeyColumn(entry.getKey())) {
-                stringsListToDeleteFromMaps.add(entry.getValue());
-            }
-        }
-
-        for (String stringsListToDeleteFromMap : stringsListToDeleteFromMaps) {
-            packetDTO.getNameMap().remove(stringsListToDeleteFromMap);
-        }
-
-        OutPacket outPacket = packetDTO.convertToOutPacket();
-
-        if (outPacket != null) {
-            packetRepository.saveAndFlush(outPacket);
-        } else {
-            System.out.println("Err");
-        }
+    for (Map.Entry<String, String> entry : packetDTO.getNameMap().entrySet()) {
+      if (0 != packetRepository.countByKeyColumn(entry.getKey())) {
+        stringsListToDeleteFromMaps.add(entry.getValue());
+      }
     }
 
-    @Override
-    public Integer getPacketsCount() {
-        return packetRepository.getPacketsCount();
+    for (String stringsListToDeleteFromMap : stringsListToDeleteFromMaps) {
+      packetDTO.getNameMap().remove(stringsListToDeleteFromMap);
     }
 
-    @Override
-    public void updatePackets(String uuid) {
-        try {
-            Long packetId = packetRepository.getIdByClientVerId(UUID.fromString(uuid));
-            OutPacket outPacket = packetRepository.findById(packetId).orElseThrow(Exception::new);
-            outPacket.setSent(true);
-            packetRepository.save(outPacket);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    OutPacket outPacket = packetDTO.convertToOutPacket();
+
+    if (outPacket != null) {
+      packetRepository.saveAndFlush(outPacket);
+    } else {
+      System.out.println("Err");
     }
+  }
+
+  @Override
+  public Integer getPacketsCount() {
+    return packetRepository.getPacketsCount();
+  }
+
+  @Override
+  public void updatePackets(String uuid) {
+    try {
+      Long packetId = packetRepository.getIdByClientVerId(UUID.fromString(uuid));
+      OutPacket outPacket = packetRepository.findById(packetId).orElseThrow(Exception::new);
+      outPacket.setSent(true);
+      packetRepository.save(outPacket);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
 }

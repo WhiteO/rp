@@ -14,36 +14,36 @@ import java.util.function.Consumer;
 
 public class PacketLoop implements Runnable {
 
-    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(PacketLoop.class);
-    final int SNAPSHOT_LENGTH = 65536;
-    final int READ_TIMEOUT = 10;
-    final String FILTER = "tcp dst port 1542 and ip[2:2] > 600";
+  private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(PacketLoop.class);
+  final int SNAPSHOT_LENGTH = 65536;
+  final int READ_TIMEOUT = 10;
+  final String FILTER = "tcp dst port 1542 and ip[2:2] > 600";
 
-    final PcapNetworkInterface networkInterface;
-    final PacketListener listener;
-    final Consumer<PcapHandle> consumer;
+  final PcapNetworkInterface networkInterface;
+  final PacketListener listener;
+  final Consumer<PcapHandle> consumer;
 
-    public PacketLoop(PcapNetworkInterface networkInterface,
-                      PacketListener listener,
-                      Consumer<PcapHandle> consumer) {
-        assert (networkInterface != null);
-        assert (listener != null);
-        assert (consumer != null);
-        this.networkInterface = networkInterface;
-        this.listener = listener;
-        this.consumer = consumer;
+  public PacketLoop(PcapNetworkInterface networkInterface,
+      PacketListener listener,
+      Consumer<PcapHandle> consumer) {
+    assert (networkInterface != null);
+    assert (listener != null);
+    assert (consumer != null);
+    this.networkInterface = networkInterface;
+    this.listener = listener;
+    this.consumer = consumer;
+  }
+
+  @Override
+  public void run() {
+    try (final PcapHandle handle = networkInterface.openLive(
+        SNAPSHOT_LENGTH,
+        PcapNetworkInterface.PromiscuousMode.PROMISCUOUS,
+        READ_TIMEOUT)) {
+      handle.setFilter(FILTER, BpfProgram.BpfCompileMode.OPTIMIZE);
+      consumer.accept(handle);
+    } catch (Exception e) {
+      LOGGER.error(e.toString());
     }
-
-    @Override
-    public void run() {
-        try (final PcapHandle handle = networkInterface.openLive(
-                SNAPSHOT_LENGTH,
-                PcapNetworkInterface.PromiscuousMode.PROMISCUOUS,
-                READ_TIMEOUT)) {
-            handle.setFilter(FILTER, BpfProgram.BpfCompileMode.OPTIMIZE);
-            consumer.accept(handle);
-        } catch (Exception e) {
-            LOGGER.error(e.toString());
-        }
-    }
+  }
 }
