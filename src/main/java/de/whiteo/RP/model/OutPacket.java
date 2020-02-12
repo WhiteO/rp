@@ -80,22 +80,6 @@ public class OutPacket implements Serializable {
   public OutPacket() {
   }
 
-  public OutPacket(Long id, UUID bindId, UUID clientVerId, Map<String, UUID> objectIdMap,
-      Map<String, UUID> classIdMap, Map<String, String> nameMap, String comment, String user,
-      Map<String, Integer> actionMap, Map<String, Boolean> removedMap, LocalDateTime date) {
-    this.id = id;
-    this.bindId = bindId;
-    this.clientVerId = clientVerId;
-    this.objectIdMap = objectIdMap;
-    this.classIdMap = classIdMap;
-    this.nameMap = nameMap;
-    this.comment = comment;
-    this.user = user;
-    this.actionMap = actionMap;
-    this.removedMap = removedMap;
-    this.date = date;
-  }
-
   @JsonProperty("DATE")
   public LocalDateTime getDate() {
     return date;

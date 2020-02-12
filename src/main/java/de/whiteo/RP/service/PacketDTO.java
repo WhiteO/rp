@@ -35,23 +35,6 @@ public class PacketDTO {
     date = LocalDateTime.now();
   }
 
-  public PacketDTO(Map<String, UUID> objectIdMap, Map<String, UUID> classIdMap,
-      Map<String, String> nameMap, UUID bindID, UUID clientVerId, String comment,
-      LocalDateTime date, Boolean sent,
-      String user, Map<String, Integer> actionMap, Map<String, Boolean> removedMap) {
-    this.objectIdMap = objectIdMap;
-    this.classIdMap = classIdMap;
-    this.nameMap = nameMap;
-    this.bindID = bindID;
-    this.clientVerId = clientVerId;
-    this.comment = comment;
-    this.sent = sent;
-    this.removedMap = removedMap;
-    this.user = user;
-    this.actionMap = actionMap;
-    this.date = date;
-  }
-
   public LocalDateTime getDate() {
     return date;
   }
