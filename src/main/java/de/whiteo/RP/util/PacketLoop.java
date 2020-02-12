@@ -26,9 +26,9 @@ public class PacketLoop implements Runnable {
   public PacketLoop(PcapNetworkInterface networkInterface,
       PacketListener listener,
       Consumer<PcapHandle> consumer) {
-    assert (networkInterface != null);
-    assert (listener != null);
-    assert (consumer != null);
+    assert (null != networkInterface);
+    assert (null != listener);
+    assert (null != consumer);
     this.networkInterface = networkInterface;
     this.listener = listener;
     this.consumer = consumer;

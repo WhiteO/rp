@@ -62,7 +62,7 @@ public class InitPacketMon {
 
       Document docXml = stringXmlToDocumentConvert(packetText);
 
-      if (docXml != null) {
+      if (null != docXml) {
 
         PacketDTO packetDTO = new PacketDTO();
 
