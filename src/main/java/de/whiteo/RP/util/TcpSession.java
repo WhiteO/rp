@@ -11,23 +11,18 @@ import java.util.List;
 
 public final class TcpSession {
 
-    private final List<TcpPacket> packetsList = new ArrayList<>();
-    private long SeqNumOffset;
-    private int window;
+  private final List<TcpPacket> packetsList = new ArrayList<>();
+  private int window;
 
-    public int getWindow() {
-        return window;
-    }
+  public int getWindow() {
+    return window;
+  }
 
-    public void setWindow(int window) {
-        this.window = window;
-    }
+  public void setWindow(int window) {
+    this.window = window;
+  }
 
-    public List<TcpPacket> getPackets() {
-        return packetsList;
-    }
-
-    public void setSeqNumOffset(long seqNumOffset) {
-        this.SeqNumOffset = seqNumOffset;
-    }
+  public List<TcpPacket> getPackets() {
+    return packetsList;
+  }
 }

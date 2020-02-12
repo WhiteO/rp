@@ -15,25 +15,25 @@ import java.util.Set;
 @RestController
 public class PacketController {
 
-    @Autowired
-    private PacketService packetService;
+  @Autowired
+  private PacketService packetService;
 
-    @GetMapping("/api/packets/get")
-    public Set<OutPacket> getPackets() {
-        return packetService.getPackets();
-    }
+  @GetMapping("/api/packets/get")
+  public Set<OutPacket> getPackets() {
+    return packetService.getPackets();
+  }
 
-    public void addPacket(PacketDTO packetDTO) {
-        packetService.addPacket(packetDTO);
-    }
+  public void addPacket(PacketDTO packetDTO) {
+    packetService.addPacket(packetDTO);
+  }
 
-    @GetMapping("/api/packets/count")
-    public Integer getPacketsCount() {
-        return packetService.getPacketsCount();
-    }
+  @GetMapping("/api/packets/count")
+  public Integer getPacketsCount() {
+    return packetService.getPacketsCount();
+  }
 
-    @PostMapping("/api/packet/update/{id}")
-    public void updatePackets(@PathVariable String id) {
-        packetService.updatePackets(id);
-    }
+  @PostMapping("/api/packet/update/{id}")
+  public void updatePackets(@PathVariable String id) {
+    packetService.updatePackets(id);
+  }
 }
