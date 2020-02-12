@@ -2,6 +2,7 @@ package de.whiteo.rp.service;
 
 import de.whiteo.rp.model.OutPacket;
 import de.whiteo.rp.repository.PacketRepository;
+import de.whiteo.rp.util.PacketConverter;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -26,39 +27,7 @@ public class PacketServiceImpl implements PacketService {
 
   @Override
   public void addPacket(PacketDTO packetDTO) {
-
-    Set<String> uuidListToDeleteFromMaps = new HashSet<>();
-
-    for (Map.Entry<String, UUID> entry : packetDTO.getClassIdMap().entrySet()) {
-      if (0 != packetRepository.countByKeyColumn(entry.getKey())) {
-        uuidListToDeleteFromMaps.add(entry.getValue().toString());
-      }
-    }
-
-    for (String str : uuidListToDeleteFromMaps) {
-      packetDTO.getClassIdMap().remove(str);
-      packetDTO.getObjectIdMap().remove(str);
-    }
-
-    List<String> stringsListToDeleteFromMaps = new ArrayList<>();
-
-    for (Map.Entry<String, String> entry : packetDTO.getNameMap().entrySet()) {
-      if (0 != packetRepository.countByKeyColumn(entry.getKey())) {
-        stringsListToDeleteFromMaps.add(entry.getValue());
-      }
-    }
-
-    for (String stringsListToDeleteFromMap : stringsListToDeleteFromMaps) {
-      packetDTO.getNameMap().remove(stringsListToDeleteFromMap);
-    }
-
-    OutPacket outPacket = packetDTO.convertToOutPacket();
-
-    if (outPacket != null) {
-      packetRepository.saveAndFlush(outPacket);
-    } else {
-      System.out.println("Err");
-    }
+    packetRepository.saveAndFlush(PacketConverter.convertToOutPacket(packetDTO));
   }
 
   @Override

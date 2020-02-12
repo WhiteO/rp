@@ -1,7 +1,5 @@
 package de.whiteo.rp.service;
 
-import de.whiteo.rp.model.OutPacket;
-
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -121,21 +119,5 @@ public class PacketDTO {
 
   public void setSent(Boolean sent) {
     this.sent = sent;
-  }
-
-  public OutPacket convertToOutPacket() {
-    OutPacket outPacket = new OutPacket();
-    outPacket.setSent(this.isSent());
-    outPacket.setNameMap(this.getNameMap());
-    outPacket.setClassIdMap(this.getClassIdMap());
-    outPacket.setBindId(this.getBindID());
-    outPacket.setClientVerId(this.getClientVerId());
-    outPacket.setComment(this.getComment());
-    outPacket.setObjectIdMap(this.getObjectIdMap());
-    outPacket.setUser(this.getUser());
-    outPacket.setActionMap(this.getActionMap());
-    outPacket.setRemovedMap(this.getRemovedMap());
-    outPacket.setDate(this.date);
-    return outPacket;
   }
 }
