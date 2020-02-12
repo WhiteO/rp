@@ -5,7 +5,7 @@
 
 RP
 ======
-A Web service for capturing packages from 1C: Enterprise Configuration Repository Server with using the [Pcap4J library](http://www.pcap4j.org/) 
+A Web service for capturing packets from 1C: Enterprise Configuration Repository Server with using the [Pcap4J library](http://www.pcap4j.org/) 
 
 Contents
 --------
