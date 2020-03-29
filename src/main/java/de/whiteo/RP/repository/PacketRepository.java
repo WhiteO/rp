@@ -17,11 +17,11 @@ import java.util.UUID;
 public interface PacketRepository extends JpaRepository<OutPacket, Long> {
 
   @Query(value =
-      "select distinct P.ID, P.USER USER, P.BIND_ID CLIENT_ID, P.CLIENT_VER_ID PUSH_VER_ID,"
+      "select distinct P.ID, P.ALIAS ALIAS, P.USER USER, P.BIND_ID CLIENT_ID, "
           +
-          " P.COMMENT COMMENT, TC.VALUE_COLUMN CLASS_ID, TN.VALUE_COLUMN OBJECT_NAME,"
+          "P.CLIENT_VER_ID PUSH_VER_ID, P.COMMENT COMMENT, TC.VALUE_COLUMN CLASS_ID, "
           +
-          "P.SENT SENT, P.DATE PUSH_DATE, T.VALUE_COLUMN OBJECT_ID,"
+          "TN.VALUE_COLUMN OBJECT_NAME, P.SENT SENT, P.DATE PUSH_DATE, T.VALUE_COLUMN OBJECT_ID, "
           +
           "TA.VALUE_COLUMN ACTION, TR.VALUE_COLUMN REMOVED"
           +

@@ -33,6 +33,7 @@ public class InitPacketMon {
   private PacketController packetController;
   private final BigInteger MIN_FOR_RANDOM = new BigInteger("1000000000000000000000000000000");
   private final BigInteger MAX_FOR_RANDOM = new BigInteger("9000000000000000000000000000000");
+  private final String INIT_VER_ID = "a00000000";
 
   public InitPacketMon() {
     ApplicationContext context = SpringContext.getAppContext();
@@ -55,24 +56,18 @@ public class InitPacketMon {
     if (window == session.getWindow()) {
       session.getPackets().add(tcp);
     }
-
     String packetText = TcpReassembler.doReassemble(session.getPackets());
-
     if (!packetText.isEmpty()) {
-
       Document docXml = stringXmlToDocumentConvert(packetText);
-
       if (null != docXml) {
-
         PacketDTO packetDTO = new PacketDTO();
-
         packetDTO.setClientVerId(
             getClientVerIDFromPacket(docXml.getElementsByTagName("crs:clientVerID")));
         packetDTO.setBindID(getBindFromPacket(docXml.getElementsByTagName("crs:bind")));
         packetDTO.setComment(getCommentFromPacket(docXml.getElementsByTagName("crs:comment")));
         packetDTO.setUser(getUserFromPacket(docXml.getElementsByTagName("crs:auth")));
+        packetDTO.setAlias(getAliasFromPacket(docXml.getElementsByTagName("crs:call")));
         processData(packetDTO, docXml.getElementsByTagName("crs:changes"));
-
         if (null != packetDTO.getClientVerId()) {
           packetController.addPacket(packetDTO);
         }
@@ -85,14 +80,8 @@ public class InitPacketMon {
     Document document = null;
     try {
       String preparedString = prepareXmlString(stringXml);
-
-      InputSource is = new InputSource();
-      is.setCharacterStream(new StringReader(preparedString));
-
-      DocumentBuilderFactory df = DocumentBuilderFactory.newInstance();
-      DocumentBuilder builder = df.newDocumentBuilder();
-      document = builder.parse(is);
-
+      DocumentBuilder df = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+      document = df.parse(new InputSource(new StringReader(preparedString)));
     } catch (IOException | ParserConfigurationException | SAXException e) {
       e.printStackTrace();
     }
@@ -103,12 +92,21 @@ public class InitPacketMon {
     return new String(stringXml.getBytes(StandardCharsets.ISO_8859_1));
   }
 
+  private String getAliasFromPacket(NodeList nodesList) {
+    String alias = null;
+    if (0 < nodesList.getLength()) {
+      Element item = (Element) nodesList.item(0);
+      alias = item.getAttributes().getNamedItem("alias").getTextContent();
+    }
+    return alias;
+  }
+
   private UUID getClientVerIDFromPacket(NodeList nodesList) {
     UUID uuidClientVerID = null;
     if (0 < nodesList.getLength()) {
       Element item = (Element) nodesList.item(0);
-      uuidClientVerID = UUID.fromString(item.getAttributes()
-          .getNamedItem("value").getTextContent());
+      uuidClientVerID = UUID
+          .fromString(item.getAttributes().getNamedItem("value").getTextContent());
     }
     return uuidClientVerID;
   }
@@ -143,14 +141,11 @@ public class InitPacketMon {
   private void processData(PacketDTO packetDTO, NodeList nodesList) {
     for (int i = 0; i < nodesList.getLength(); i++) {
       Element item = (Element) nodesList.item(i);
-
       NodeList itemsChildNodes = item.getChildNodes();
       for (int j = 0; j < itemsChildNodes.getLength(); j++) {
         Node childNode = itemsChildNodes.item(j);
-
         Map<String, String> tempMap = new HashMap<>();
         recursivePocketedChildNodes(tempMap, childNode);
-
         String verId = null == tempMap.get("verId") ? getRandomVerId() : tempMap.get("verId");
         packetDTO.getClassIdMap().put(verId, UUID.fromString(tempMap.get("classId")));
         packetDTO.getObjectIdMap().put(verId, UUID.fromString(tempMap.get("objectId")));
@@ -174,7 +169,6 @@ public class InitPacketMon {
     if (res.compareTo(bigInteger) >= 0) {
       res = res.mod(bigInteger).add(MIN_FOR_RANDOM);
     }
-    String INIT_VER_ID = "a00000000";
     return res.toString() + INIT_VER_ID;
   }
 
