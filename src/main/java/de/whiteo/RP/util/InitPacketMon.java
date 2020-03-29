@@ -33,7 +33,6 @@ public class InitPacketMon {
   private PacketController packetController;
   private final BigInteger MIN_FOR_RANDOM = new BigInteger("1000000000000000000000000000000");
   private final BigInteger MAX_FOR_RANDOM = new BigInteger("9000000000000000000000000000000");
-  private final String INIT_VER_ID = "a00000000";
 
   public InitPacketMon() {
     ApplicationContext context = SpringContext.getAppContext();
@@ -169,6 +168,7 @@ public class InitPacketMon {
     if (res.compareTo(bigInteger) >= 0) {
       res = res.mod(bigInteger).add(MIN_FOR_RANDOM);
     }
+    String INIT_VER_ID = "a00000000";
     return res.toString() + INIT_VER_ID;
   }
 
