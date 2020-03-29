@@ -26,6 +26,8 @@ public class OutPacket implements Serializable {
   private Long id;
   @Column(name = "USER", columnDefinition = "VARCHAR(255)")
   private String user;
+  @Column(name = "ALIAS", columnDefinition = "VARCHAR(255)")
+  private String alias;
   @GeneratedValue(generator = "UUID")
   @GenericGenerator(name = "UUID", strategy = "uuid2")
   @Column(name = "BIND_ID", columnDefinition = "UUID")
@@ -183,6 +185,15 @@ public class OutPacket implements Serializable {
     this.sent = sent;
   }
 
+  @JsonProperty("ALIAS")
+  public String getAlias() {
+    return alias;
+  }
+
+  public void setAlias(String alias) {
+    this.alias = alias;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -203,12 +214,13 @@ public class OutPacket implements Serializable {
         Objects.equals(actionMap, outPacket.actionMap) &&
         Objects.equals(removedMap, outPacket.removedMap) &&
         Objects.equals(date, outPacket.date) &&
-        Objects.equals(sent, outPacket.sent);
+        Objects.equals(sent, outPacket.sent) &&
+        Objects.equals(alias, outPacket.alias);
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(id, bindId, clientVerId, objectIdMap, classIdMap,
-        nameMap, comment, user, actionMap, removedMap, sent, date);
+        nameMap, comment, user, actionMap, removedMap, sent, date, alias);
   }
 }

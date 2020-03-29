@@ -19,6 +19,7 @@ public class PacketDTO {
   private String comment;
   private Boolean sent;
   private String user;
+  private String alias;
   private Map<String, Integer> actionMap;
   private Map<String, Boolean> removedMap;
   private LocalDateTime date;
@@ -119,5 +120,13 @@ public class PacketDTO {
 
   public void setSent(Boolean sent) {
     this.sent = sent;
+  }
+
+  public String getAlias() {
+    return alias;
+  }
+
+  public void setAlias(String alias) {
+    this.alias = alias;
   }
 }

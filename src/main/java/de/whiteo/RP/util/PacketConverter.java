@@ -22,6 +22,7 @@ public class PacketConverter {
     outPacket.setActionMap(packetDTO.getActionMap());
     outPacket.setRemovedMap(packetDTO.getRemovedMap());
     outPacket.setDate(packetDTO.getDate());
+    outPacket.setAlias(packetDTO.getAlias());
     return outPacket;
   }
 }
