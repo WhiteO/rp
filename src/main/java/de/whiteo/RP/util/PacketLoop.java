@@ -17,7 +17,7 @@ public class PacketLoop implements Runnable {
   private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(PacketLoop.class);
   final int SNAPSHOT_LENGTH = 65536;
   final int READ_TIMEOUT = 10;
-  final String FILTER = "tcp dst port 1542 and ip[2:2] > 600";
+  final String FILTER = "tcp dst port 1542 and ip[2:2] > 400";
   final PcapNetworkInterface NETWORK_INTERFACE;
   final PacketListener LISTENER;
   final Consumer<PcapHandle> CONSUMER;
