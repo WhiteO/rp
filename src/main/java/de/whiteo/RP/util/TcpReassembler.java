@@ -12,23 +12,26 @@ import org.pcap4j.packet.TcpPacket;
 public class TcpReassembler {
 
   private static final String LAST_ELEMENT_IN_STRING = "</crs:call>fS²¦";
+  private final static String POST = "POST";
 
   public static String doReassemble(List<TcpPacket> packets) {
     StringBuilder stringBuilder = new StringBuilder();
 
     for (TcpPacket p : packets) {
       String hexString = toHexString(p.getPayload().getRawData(), "");
-      String string = convertHexToString(hexString);
-      if ((string.startsWith("POST") && !stringBuilder.toString().contains("POST"))
-          || !stringBuilder.toString().endsWith(LAST_ELEMENT_IN_STRING)) {
-        stringBuilder.append(string);
+      String convertedString = convertHexToString(hexString);
+      if ((convertedString.startsWith(POST) && !stringBuilder.toString().contains(POST) &&
+          convertedString.contains("<crs:data>")) || (!stringBuilder.toString()
+          .endsWith(LAST_ELEMENT_IN_STRING) && convertedString.contains("<crs:data>"))) {
+        stringBuilder.append(convertedString);
       }
     }
     String stringToReturn = "";
     if (stringBuilder.toString().contains(LAST_ELEMENT_IN_STRING)) {
       int indexStartXml = stringBuilder.toString().indexOf("<?xml");
+      int indexEndXml = stringBuilder.toString().indexOf("fS²¦");
       stringToReturn = stringBuilder.toString()
-          .substring(indexStartXml, stringBuilder.toString().length() - 4);
+          .substring(indexStartXml, indexEndXml);
     }
     return stringToReturn;
   }
