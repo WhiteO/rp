@@ -20,14 +20,12 @@ public class TcpReassembler {
     for (TcpPacket p : packets) {
       String hexString = toHexString(p.getPayload().getRawData(), "");
       String convertedString = convertHexToString(hexString);
-      if ((convertedString.startsWith(POST) && !stringBuilder.toString().contains(POST) &&
-          convertedString.contains("<crs:data>")) || (!stringBuilder.toString()
-          .endsWith(LAST_ELEMENT_IN_STRING) && convertedString.contains("<crs:data>"))) {
-        stringBuilder.append(convertedString);
-      }
+      stringBuilder.append(convertedString);
     }
+
     String stringToReturn = "";
-    if (stringBuilder.toString().contains(LAST_ELEMENT_IN_STRING)) {
+    if (stringBuilder.toString().contains(LAST_ELEMENT_IN_STRING) && stringBuilder.toString()
+        .contains(POST)) {
       int indexStartXml = stringBuilder.toString().indexOf("<?xml");
       int indexEndXml = stringBuilder.toString().indexOf("fS²¦");
       stringToReturn = stringBuilder.toString()

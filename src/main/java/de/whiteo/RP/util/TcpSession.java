@@ -1,9 +1,8 @@
 package de.whiteo.rp.util;
 
+import java.util.Map;
+import java.util.TreeMap;
 import org.pcap4j.packet.TcpPacket;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Ruslan Tanas {@literal <skyuser13@gmail.com>}
@@ -11,18 +10,32 @@ import java.util.List;
 
 public final class TcpSession {
 
-  private final List<TcpPacket> packetsList = new ArrayList<>();
-  private int window;
+  private final Map<Short, TcpPacket> packetMap = new TreeMap<>();
+  private boolean complete;
+  private boolean halfComplete;
 
-  public int getWindow() {
-    return window;
+  public TcpSession(Short identification, TcpPacket tcpPacket) {
+    this.complete = false;
+    this.packetMap.put(identification, tcpPacket);
   }
 
-  public void setWindow(int window) {
-    this.window = window;
+  public boolean isHalfComplete() {
+    return halfComplete;
   }
 
-  public List<TcpPacket> getPackets() {
-    return packetsList;
+  public void setHalfComplete(boolean halfComplete) {
+    this.halfComplete = halfComplete;
+  }
+
+  public void setComplete(boolean complete) {
+    this.complete = complete;
+  }
+
+  public boolean isComplete() {
+    return complete;
+  }
+
+  public Map<Short, TcpPacket> getPacketMap() {
+    return packetMap;
   }
 }

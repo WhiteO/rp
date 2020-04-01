@@ -3,6 +3,8 @@ package de.whiteo.rp;
 import de.whiteo.rp.util.InitPacketMon;
 import de.whiteo.rp.util.PacketLoop;
 import de.whiteo.rp.util.TcpSession;
+import java.util.HashMap;
+import java.util.Map;
 import org.pcap4j.core.PacketListener;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.PcapNetworkInterface;
@@ -11,14 +13,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @SpringBootApplication
 public class RpApplication {
 
-  static Map<Integer, TcpSession> sessions = new HashMap<>();
-  final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(RpApplication.class);
+  private static Map<Long, TcpSession> sessions = new HashMap<>();
+  private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(RpApplication.class);
 
   @SuppressWarnings("InfiniteLoopStatement")
   public static void main(String[] args) throws PcapNativeException {
@@ -27,9 +26,8 @@ public class RpApplication {
     String deviceName;
     if (0 != args.length) {
       deviceName = args[0];
-    }
-    else {
-      LOGGER.info("to get device name, use getmac /fo csv /v");
+    } else {
+      LOGGER.info("to get device name, use 'getmac /fo csv /v'");
       deviceName = "\\Device\\NPF_Loopback";
     }
 
