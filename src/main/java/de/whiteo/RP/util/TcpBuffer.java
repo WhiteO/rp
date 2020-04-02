@@ -14,7 +14,10 @@ public class TcpBuffer {
 
     if (psh) {
       sessions.setHalfComplete(true);
-    } else if (sessions.isHalfComplete()) {
+    }
+
+    boolean endElements = tcpPacket.getPayload().toString().trim().endsWith("66 53 b2 a6");
+    if (endElements && sessions.isHalfComplete()) {
       sessions.setComplete(true);
     }
 

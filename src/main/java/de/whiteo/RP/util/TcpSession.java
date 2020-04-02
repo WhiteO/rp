@@ -1,7 +1,7 @@
 package de.whiteo.rp.util;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 import org.pcap4j.packet.TcpPacket;
 
 /**
@@ -10,12 +10,13 @@ import org.pcap4j.packet.TcpPacket;
 
 public final class TcpSession {
 
-  private final Map<Short, TcpPacket> packetMap = new TreeMap<>();
+  private final Map<Short, TcpPacket> packetMap;
   private boolean complete;
   private boolean halfComplete;
 
   public TcpSession(Short identification, TcpPacket tcpPacket) {
     this.complete = false;
+    this.packetMap = new HashMap<>();
     this.packetMap.put(identification, tcpPacket);
   }
 

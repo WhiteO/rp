@@ -16,22 +16,18 @@ import org.w3c.dom.NodeList;
 public class TcpParser {
 
   public static PacketDTO parseXmlFromPacket(String packetText) {
-    PacketDTO result = null;
-
+    PacketDTO packetDTO = new PacketDTO();
     Document docXml = DocumentConverter.stringXmlToDocumentConvert(packetText);
     if (null != docXml) {
-      PacketDTO packetDTO = new PacketDTO(
-          getBindFromPacket(docXml.getElementsByTagName("crs:bind")),
-          getClientVerIDFromPacket(docXml.getElementsByTagName("crs:clientVerID")),
-          getCommentFromPacket(docXml.getElementsByTagName("crs:comment")),
-          getUserFromPacket(docXml.getElementsByTagName("crs:auth")),
-          getAliasFromPacket(docXml.getElementsByTagName("crs:call")));
+      packetDTO.setClientVerId(
+          getClientVerIDFromPacket(docXml.getElementsByTagName("crs:clientVerID")));
+      packetDTO.setBindID(getBindFromPacket(docXml.getElementsByTagName("crs:bind")));
+      packetDTO.setComment(getCommentFromPacket(docXml.getElementsByTagName("crs:comment")));
+      packetDTO.setUser(getUserFromPacket(docXml.getElementsByTagName("crs:auth")));
+      packetDTO.setAlias(getAliasFromPacket(docXml.getElementsByTagName("crs:call")));
       processData(packetDTO, docXml.getElementsByTagName("crs:changes"));
-      if (null != packetDTO.getClientVerId()) {
-        result = packetDTO;
-      }
     }
-    return result;
+    return packetDTO;
   }
 
   private static String getAliasFromPacket(NodeList nodesList) {

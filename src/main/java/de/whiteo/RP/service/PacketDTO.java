@@ -24,19 +24,14 @@ public class PacketDTO {
   private Map<String, Boolean> removedMap;
   private LocalDateTime date;
 
-  public PacketDTO(UUID bindID, UUID clientVerId, String comment, String user, String alias) {
-    this.objectIdMap = new HashMap<>();
-    this.classIdMap = new HashMap<>();
-    this.nameMap = new HashMap<>();
-    this.bindID = bindID;
-    this.clientVerId = clientVerId;
-    this.comment = comment;
-    this.sent = false;
-    this.user = user;
-    this.alias = alias;
-    this.actionMap = new HashMap<>();
-    this.removedMap = new HashMap<>();
-    this.date = LocalDateTime.now();
+  public PacketDTO() {
+    sent = false;
+    objectIdMap = new HashMap<>();
+    classIdMap = new HashMap<>();
+    nameMap = new HashMap<>();
+    actionMap = new HashMap<>();
+    removedMap = new HashMap<>();
+    date = LocalDateTime.now();
   }
 
   public LocalDateTime getDate() {
