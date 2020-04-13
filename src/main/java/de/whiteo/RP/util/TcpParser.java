@@ -17,6 +17,8 @@ public class TcpParser {
 
   public static PacketDTO parseXmlFromPacket(String packetText) {
     PacketDTO packetDTO = new PacketDTO();
+    System.out.println(packetText);
+    System.out.println("-------------------------------------------------------------------------");
     Document docXml = DocumentConverter.stringXmlToDocumentConvert(packetText);
     if (null != docXml) {
       packetDTO.setClientVerId(

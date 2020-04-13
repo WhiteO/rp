@@ -13,6 +13,7 @@ public class TcpReassembler {
 
   private static final String LAST_ELEMENT_IN_STRING = "</crs:call>fS²¦";
   private final static String POST = "POST";
+  private final static String IS_COMMIT = "DevDepot_commitObjects";
 
   public static String doReassemble(List<TcpPacket> packets) {
     StringBuilder stringBuilder = new StringBuilder();
@@ -24,7 +25,8 @@ public class TcpReassembler {
     }
 
     String stringToReturn = "";
-    if (stringBuilder.toString().contains(LAST_ELEMENT_IN_STRING) && stringBuilder.toString()
+    if (stringBuilder.toString().contains(IS_COMMIT) && stringBuilder.toString()
+        .contains(LAST_ELEMENT_IN_STRING) && stringBuilder.toString()
         .contains(POST)) {
       int indexStartXml = stringBuilder.toString().indexOf("<?xml");
       int indexEndXml = stringBuilder.toString().indexOf("fS²¦");

@@ -13,11 +13,11 @@ import org.springframework.context.ApplicationContext;
 
 public class Executor {
 
-  private static PacketController packetController;
+  private static final PacketController PACKET_CONTROLLER;
 
   static {
     ApplicationContext context = SpringContext.getAppContext();
-    packetController = (PacketController) context.getBean("packetController");
+    PACKET_CONTROLLER = (PacketController) context.getBean("packetController");
   }
 
   public static void doExecute(List<TcpPacket> packets) {
@@ -25,7 +25,7 @@ public class Executor {
     if (!packetText.isEmpty()) {
       PacketDTO packetDTO = TcpParser.parseXmlFromPacket(packetText);
       if (null != packetDTO.getClientVerId()) {
-        packetController.addPacket(packetDTO);
+        PACKET_CONTROLLER.addPacket(packetDTO);
       }
     }
   }
