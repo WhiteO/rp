@@ -1,7 +1,7 @@
 package de.whiteo.rp.util;
 
+import de.whiteo.rp.model.Logger;
 import java.time.LocalDateTime;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author Ruslan Tanas {@literal <skyuser13@gmail.com>}
@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 public class DebugSingleton {
 
   private static volatile DebugSingleton instance;
-  private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(DebugSingleton.class);
   private boolean enable;
 
   private static DebugSingleton getInstance() {
@@ -36,10 +35,10 @@ public class DebugSingleton {
     debugSingleton.enable = true;
   }
 
-  public static void runLogger(String txt) {
-    LOGGER.info("-------------------------------------------------------------------------");
-    LOGGER.info(txt);
-    LOGGER.info(LocalDateTime.now().toString());
-    LOGGER.info("-------------------------------------------------------------------------");
+  public static Logger runLogger(String txt) {
+    Logger logger = new Logger();
+    logger.setErrorDate(LocalDateTime.now());
+    logger.setErrorString(txt);
+    return logger;
   }
 }

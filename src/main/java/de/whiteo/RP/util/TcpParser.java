@@ -1,7 +1,7 @@
 package de.whiteo.rp.util;
 
 import de.whiteo.rp.config.SpringContext;
-import de.whiteo.rp.controller.PacketController;
+import de.whiteo.rp.controller.ApiController;
 import de.whiteo.rp.service.PacketDTO;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,45 +18,52 @@ import org.w3c.dom.NodeList;
 
 public class TcpParser {
 
-  private static final PacketController PACKET_CONTROLLER;
+  private static final ApiController API_CONTROLLER;
 
   static {
     ApplicationContext context = SpringContext.getAppContext();
-    PACKET_CONTROLLER = (PacketController) context.getBean("packetController");
+    API_CONTROLLER = (ApiController) context.getBean("packetController");
   }
 
   public static PacketDTO parseCommitXmlFromPacket(String packetText) {
-    if (DebugSingleton.isEnable()) {
-      DebugSingleton.runLogger(packetText);
-    }
     PacketDTO packetDTO = null;
-    Document docXml = DocumentConverter.stringXmlToDocumentConvert(packetText);
-    if (null != docXml) {
-      packetDTO = new PacketDTO();
-      packetDTO.setClientVerId(
-          getClientVerIDFromPacket(docXml.getElementsByTagName("crs:clientVerID")));
-      packetDTO.setBindID(getBindFromPacket(docXml.getElementsByTagName("crs:bind")));
-      packetDTO.setComment(getCommentFromPacket(docXml.getElementsByTagName("crs:comment")));
-      packetDTO.setUser(getUserFromPacket(docXml.getElementsByTagName("crs:auth")));
-      packetDTO.setAlias(getAliasFromPacket(docXml.getElementsByTagName("crs:call")));
-      processData(packetDTO, docXml.getElementsByTagName("crs:changes"));
+    try {
+      Document docXml = DocumentConverter.stringXmlToDocumentConvert(packetText);
+      if (null != docXml) {
+        packetDTO = new PacketDTO();
+        packetDTO.setClientVerId(
+            getClientVerIDFromPacket(docXml.getElementsByTagName("crs:clientVerID")));
+        packetDTO.setBindID(getBindFromPacket(docXml.getElementsByTagName("crs:bind")));
+        packetDTO.setComment(getCommentFromPacket(docXml.getElementsByTagName("crs:comment")));
+        packetDTO.setUser(getUserFromPacket(docXml.getElementsByTagName("crs:auth")));
+        packetDTO.setAlias(getAliasFromPacket(docXml.getElementsByTagName("crs:call")));
+        processData(packetDTO, docXml.getElementsByTagName("crs:changes"));
+      }
+    } catch (Exception e) {
+      if (DebugSingleton.isEnable()) {
+        API_CONTROLLER.addLog(DebugSingleton.runLogger(e.toString()));
+      }
     }
+
     return packetDTO;
   }
 
   public static PacketDTO parseChangeVerXmlFromPacket(String packetText) {
-    if (DebugSingleton.isEnable()) {
-      DebugSingleton.runLogger(packetText);
-    }
     PacketDTO packetDTO = null;
-    Document docXml = DocumentConverter.stringXmlToDocumentConvert(packetText);
-    if (null != docXml) {
-      packetDTO = PACKET_CONTROLLER
-          .getPacket(getClientVerIDFromPacket(docXml.getElementsByTagName("crs:clientVerID")));
-      packetDTO.setVerNumCommit(1);
-      packetDTO.setNameCommit("");
-      packetDTO.setCommentNameCommit("");
-      packetDTO.setUserChangeCommit("");
+    try {
+      Document docXml = DocumentConverter.stringXmlToDocumentConvert(packetText);
+      if (null != docXml) {
+        packetDTO = API_CONTROLLER
+            .getPacket(getClientVerIDFromPacket(docXml.getElementsByTagName("crs:clientVerID")));
+        packetDTO.setVerNumCommit(1);
+        packetDTO.setNameCommit("");
+        packetDTO.setCommentNameCommit("");
+        packetDTO.setUserChangeCommit("");
+      }
+    } catch (Exception e) {
+      if (DebugSingleton.isEnable()) {
+        API_CONTROLLER.addLog(DebugSingleton.runLogger(e.toString()));
+      }
     }
     return packetDTO;
   }

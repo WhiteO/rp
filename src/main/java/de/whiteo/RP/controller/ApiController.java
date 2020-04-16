@@ -1,8 +1,9 @@
 package de.whiteo.rp.controller;
 
+import de.whiteo.rp.model.Logger;
 import de.whiteo.rp.model.OutPacket;
 import de.whiteo.rp.service.PacketDTO;
-import de.whiteo.rp.service.PacketService;
+import de.whiteo.rp.service.ApiService;
 import java.util.Set;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,30 +15,44 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
-public class PacketController {
+public class ApiController {
 
   @Autowired
-  private PacketService packetService;
+  private ApiService apiService;
 
   @GetMapping("/api/packets/get")
   public Set<OutPacket> getPackets() {
-    return packetService.getPackets();
+    return apiService.getPackets();
   }
 
   public void addPacket(PacketDTO packetDTO) {
-    packetService.addPacket(packetDTO);
+    apiService.addPacket(packetDTO);
   }
 
   @GetMapping("/api/packets/count")
   public Integer getPacketsCount() {
-    return packetService.getPacketsCount();
+    return apiService.getPacketsCount();
   }
 
   public PacketDTO getPacket(UUID clientVerId) {
-    return packetService.getPacketId(clientVerId);
+    return apiService.getPacketId(clientVerId);
   }
 
   public void updatePacket(PacketDTO packetDTO) {
-    packetService.updatePacket(packetDTO);
+    apiService.updatePacket(packetDTO);
+  }
+
+  public void addLog(Logger logger) {
+    apiService.addLogger(logger);
+  }
+
+  @GetMapping("/api/errors/get")
+  public Set<Logger> getLoggers() {
+    return apiService.getLoggers();
+  }
+
+  @GetMapping("/api/errors/count")
+  public Integer getLoggerCount() {
+    return apiService.getLoggersCount();
   }
 }

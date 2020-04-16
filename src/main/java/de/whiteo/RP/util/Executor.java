@@ -1,7 +1,7 @@
 package de.whiteo.rp.util;
 
 import de.whiteo.rp.config.SpringContext;
-import de.whiteo.rp.controller.PacketController;
+import de.whiteo.rp.controller.ApiController;
 import de.whiteo.rp.service.PacketDTO;
 import java.util.List;
 import javafx.util.Pair;
@@ -14,11 +14,11 @@ import org.springframework.context.ApplicationContext;
 
 public class Executor {
 
-  private static final PacketController PACKET_CONTROLLER;
+  private static final ApiController API_CONTROLLER;
 
   static {
     ApplicationContext context = SpringContext.getAppContext();
-    PACKET_CONTROLLER = (PacketController) context.getBean("packetController");
+    API_CONTROLLER = (ApiController) context.getBean("packetController");
   }
 
   public static void doExecute(List<TcpPacket> packets) {
@@ -29,12 +29,12 @@ public class Executor {
       if ("commit".equals(pairKey) && !pairValue.isEmpty()) {
         PacketDTO packetDTO = TcpParser.parseCommitXmlFromPacket(pairValue);
         if (null != packetDTO) {
-          PACKET_CONTROLLER.addPacket(packetDTO);
+          API_CONTROLLER.addPacket(packetDTO);
         }
       } else if ("version_change".equals(pairKey) && !pairValue.isEmpty()) {
         PacketDTO packetDTO = TcpParser.parseChangeVerXmlFromPacket(pairValue);
         if (null != packetDTO) {
-          PACKET_CONTROLLER.updatePacket(packetDTO);
+          API_CONTROLLER.updatePacket(packetDTO);
         }
       }
     }
