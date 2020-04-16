@@ -23,7 +23,9 @@ public class DocumentConverter {
       DocumentBuilder df = DocumentBuilderFactory.newInstance().newDocumentBuilder();
       document = df.parse(new InputSource(new StringReader(preparedString)));
     } catch (IOException | ParserConfigurationException | SAXException e) {
-      e.printStackTrace();
+      if (DebugSingleton.isEnable()) {
+        Executor.doLogger(DebugSingleton.saveLogger(e.toString()));
+      }
     }
     return document;
   }

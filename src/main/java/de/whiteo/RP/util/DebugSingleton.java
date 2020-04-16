@@ -35,7 +35,7 @@ public class DebugSingleton {
     debugSingleton.enable = true;
   }
 
-  public static Logger runLogger(String txt) {
+  public static Logger saveLogger(String txt) {
     Logger logger = new Logger();
     logger.setErrorDate(LocalDateTime.now());
     logger.setErrorString(txt);

@@ -2,8 +2,10 @@ package de.whiteo.rp.util;
 
 import de.whiteo.rp.config.SpringContext;
 import de.whiteo.rp.controller.ApiController;
+import de.whiteo.rp.model.Logger;
 import de.whiteo.rp.service.PacketDTO;
 import java.util.List;
+import java.util.UUID;
 import javafx.util.Pair;
 import org.pcap4j.packet.TcpPacket;
 import org.springframework.context.ApplicationContext;
@@ -38,5 +40,13 @@ public class Executor {
         }
       }
     }
+  }
+
+  public static PacketDTO getPacketDTOFromBase(UUID clientVerId) {
+    return API_CONTROLLER.getPacket(clientVerId);
+  }
+
+  public static void doLogger(Logger logger) {
+    API_CONTROLLER.addLog(logger);
   }
 }
