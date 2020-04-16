@@ -1,9 +1,12 @@
 package de.whiteo.rp.util;
 
+import de.whiteo.rp.config.SpringContext;
+import de.whiteo.rp.controller.PacketController;
 import de.whiteo.rp.service.PacketDTO;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import org.springframework.context.ApplicationContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -15,12 +18,21 @@ import org.w3c.dom.NodeList;
 
 public class TcpParser {
 
-  public static PacketDTO parseXmlFromPacket(String packetText) {
-    PacketDTO packetDTO = new PacketDTO();
-    System.out.println(packetText);
-    System.out.println("-------------------------------------------------------------------------");
+  private static final PacketController PACKET_CONTROLLER;
+
+  static {
+    ApplicationContext context = SpringContext.getAppContext();
+    PACKET_CONTROLLER = (PacketController) context.getBean("packetController");
+  }
+
+  public static PacketDTO parseCommitXmlFromPacket(String packetText) {
+    if (DebugSingleton.isEnable()) {
+      DebugSingleton.runLogger(packetText);
+    }
+    PacketDTO packetDTO = null;
     Document docXml = DocumentConverter.stringXmlToDocumentConvert(packetText);
     if (null != docXml) {
+      packetDTO = new PacketDTO();
       packetDTO.setClientVerId(
           getClientVerIDFromPacket(docXml.getElementsByTagName("crs:clientVerID")));
       packetDTO.setBindID(getBindFromPacket(docXml.getElementsByTagName("crs:bind")));
@@ -30,6 +42,60 @@ public class TcpParser {
       processData(packetDTO, docXml.getElementsByTagName("crs:changes"));
     }
     return packetDTO;
+  }
+
+  public static PacketDTO parseChangeVerXmlFromPacket(String packetText) {
+    if (DebugSingleton.isEnable()) {
+      DebugSingleton.runLogger(packetText);
+    }
+    PacketDTO packetDTO = null;
+    Document docXml = DocumentConverter.stringXmlToDocumentConvert(packetText);
+    if (null != docXml) {
+      packetDTO = PACKET_CONTROLLER
+          .getPacket(getClientVerIDFromPacket(docXml.getElementsByTagName("crs:clientVerID")));
+      packetDTO.setVerNumCommit(1);
+      packetDTO.setNameCommit("");
+      packetDTO.setCommentNameCommit("");
+      packetDTO.setUserChangeCommit("");
+    }
+    return packetDTO;
+  }
+
+  private static Integer getVerNumCommitFromPacket(NodeList nodesList) {
+    Integer verNum = null;
+    if (0 < nodesList.getLength()) {
+      Element item = (Element) nodesList.item(0);
+      verNum = Integer.parseInt(item.getAttributes().getNamedItem("verNum").getTextContent());
+    }
+    return verNum;
+  }
+
+  private static String getNameCommitFromPacket(NodeList nodesList) {
+    String name = null;
+    if (0 < nodesList.getLength()) {
+      Element item = (Element) nodesList.item(0);
+      name = item.getAttributes().getNamedItem("name").getTextContent();
+    }
+    return name;
+  }
+
+  private static String getCommentNameCommitFromPacket(NodeList nodesList) {
+    String commentName = null;
+    if (0 < nodesList.getLength()) {
+      Element item = (Element) nodesList.item(0);
+      commentName = item.getAttributes().getNamedItem("comment").getTextContent();
+    }
+    return commentName;
+  }
+
+  private static UUID getUserIdFromPacket(NodeList nodesList) {
+    UUID uuidUserId = null;
+    if (0 < nodesList.getLength()) {
+      Element item = (Element) nodesList.item(0);
+      uuidUserId = UUID
+          .fromString(item.getAttributes().getNamedItem("UserID").getTextContent());
+    }
+    return uuidUserId;
   }
 
   private static String getAliasFromPacket(NodeList nodesList) {
@@ -42,13 +108,13 @@ public class TcpParser {
   }
 
   private static UUID getClientVerIDFromPacket(NodeList nodesList) {
-    UUID uuidClientVerID = null;
+    UUID uuidClientVerId = null;
     if (0 < nodesList.getLength()) {
       Element item = (Element) nodesList.item(0);
-      uuidClientVerID = UUID
+      uuidClientVerId = UUID
           .fromString(item.getAttributes().getNamedItem("value").getTextContent());
     }
-    return uuidClientVerID;
+    return uuidClientVerId;
   }
 
   private static UUID getBindFromPacket(NodeList nodesList) {

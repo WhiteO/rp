@@ -16,7 +16,6 @@ public class GetPackets {
 
   private static final Map<Long, TcpSession> sessions = new HashMap<>();
 
-  @SuppressWarnings("InfiniteLoopStatement")
   public static void run(String deviceName) throws PcapNativeException {
     final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(GetPackets.class);
     final PcapNetworkInterface DEVICE = Pcaps.getDevByName(deviceName);

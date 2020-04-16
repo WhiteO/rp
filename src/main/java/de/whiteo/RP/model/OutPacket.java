@@ -78,8 +78,63 @@ public class OutPacket implements Serializable {
   private Boolean sent;
   @Column(name = "DATE", columnDefinition = "DATETIME")
   private LocalDateTime date;
+  @Column(name = "NUMBER_COMMIT", columnDefinition = "INTEGER")
+  private Integer verNumCommit;
+  @Column(name = "NAME_COMMIT", columnDefinition = "VARCHAR(255)")
+  private String nameCommit;
+  @Column(name = "COMMENT_COMMIT", columnDefinition = "VARCHAR(255)")
+  private String commentNameCommit;
+  @Column(name = "DATE_CHANGE_COMMIT", columnDefinition = "DATETIME")
+  private LocalDateTime dateChangeNameCommit;
+  @Column(name = "USER_CHANGE_COMMIT", columnDefinition = "VARCHAR(255)")
+  private String userChangeCommit;
 
   public OutPacket() {
+  }
+
+  @JsonProperty("NUMBER_COMMIT")
+  public Integer getVerNumCommit() {
+    return verNumCommit;
+  }
+
+  public void setVerNumCommit(Integer verNumCommit) {
+    this.verNumCommit = verNumCommit;
+  }
+
+  @JsonProperty("NAME_COMMIT")
+  public String getNameCommit() {
+    return nameCommit;
+  }
+
+  public void setNameCommit(String nameCommit) {
+    this.nameCommit = nameCommit;
+  }
+
+  @JsonProperty("COMMENT_NAME_COMMIT")
+  public String getCommentNameCommit() {
+    return commentNameCommit;
+  }
+
+  public void setCommentNameCommit(String commentNameCommit) {
+    this.commentNameCommit = commentNameCommit;
+  }
+
+  @JsonProperty("DATE_CHANGE_COMMIT")
+  public LocalDateTime getDateChangeNameCommit() {
+    return dateChangeNameCommit;
+  }
+
+  public void setDateChangeNameCommit(LocalDateTime dateChangeNameCommit) {
+    this.dateChangeNameCommit = dateChangeNameCommit;
+  }
+
+  @JsonProperty("USER_CHANGE_COMMIT")
+  public String getUserChangeCommit() {
+    return userChangeCommit;
+  }
+
+  public void setUserChangeCommit(String userChangeCommit) {
+    this.userChangeCommit = userChangeCommit;
   }
 
   @JsonProperty("DATE")
@@ -93,6 +148,10 @@ public class OutPacket implements Serializable {
 
   public Long getId() {
     return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   @JsonProperty("CLIENT_ID")

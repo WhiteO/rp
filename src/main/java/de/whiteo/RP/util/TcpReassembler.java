@@ -3,6 +3,7 @@ package de.whiteo.rp.util;
 import static org.pcap4j.util.ByteArrays.toHexString;
 
 import java.util.List;
+import javafx.util.Pair;
 import org.pcap4j.packet.TcpPacket;
 
 /**
@@ -13,9 +14,8 @@ public class TcpReassembler {
 
   private static final String LAST_ELEMENT_IN_STRING = "</crs:call>fS²¦";
   private final static String POST = "POST";
-  private final static String IS_COMMIT = "DevDepot_commitObjects";
 
-  public static String doReassemble(List<TcpPacket> packets) {
+  public static Pair<String, String> doReassemble(List<TcpPacket> packets) {
     StringBuilder stringBuilder = new StringBuilder();
 
     for (TcpPacket p : packets) {
@@ -24,16 +24,23 @@ public class TcpReassembler {
       stringBuilder.append(convertedString);
     }
 
-    String stringToReturn = "";
-    if (stringBuilder.toString().contains(IS_COMMIT) && stringBuilder.toString()
-        .contains(LAST_ELEMENT_IN_STRING) && stringBuilder.toString()
-        .contains(POST)) {
-      int indexStartXml = stringBuilder.toString().indexOf("<?xml");
-      int indexEndXml = stringBuilder.toString().indexOf("fS²¦");
-      stringToReturn = stringBuilder.toString()
-          .substring(indexStartXml, indexEndXml);
+    Pair<String, String> pairToReturn = null;
+    String unpreparedString = stringBuilder.toString();
+    if (unpreparedString.contains(PacketType.PACKET_COMMIT.value()) && unpreparedString
+        .contains(LAST_ELEMENT_IN_STRING)
+        && unpreparedString.contains(POST)) {
+      int indexStartXml = unpreparedString.indexOf("<?xml");
+      int indexEndXml = unpreparedString.indexOf("fS²¦");
+      pairToReturn = new Pair<>("commit", unpreparedString.substring(indexStartXml, indexEndXml));
+    } else if (unpreparedString.contains(PacketType.PACKET_CHANGE_VERSION.value())
+        && unpreparedString
+        .contains(LAST_ELEMENT_IN_STRING) && unpreparedString.contains(POST)) {
+      int indexStartXml = unpreparedString.indexOf("<?xml");
+      int indexEndXml = unpreparedString.indexOf("fS²¦");
+      pairToReturn = new Pair<>("version_change",
+          unpreparedString.substring(indexStartXml, indexEndXml));
     }
-    return stringToReturn;
+    return pairToReturn;
   }
 
   public static String convertHexToString(String hex) {

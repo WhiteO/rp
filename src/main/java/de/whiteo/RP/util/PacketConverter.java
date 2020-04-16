@@ -11,6 +11,7 @@ public class PacketConverter {
 
   public static OutPacket convertToOutPacket(PacketDTO packetDTO) {
     OutPacket outPacket = new OutPacket();
+    outPacket.setId(packetDTO.getId());
     outPacket.setSent(packetDTO.isSent());
     outPacket.setNameMap(packetDTO.getNameMap());
     outPacket.setClassIdMap(packetDTO.getClassIdMap());
@@ -23,6 +24,18 @@ public class PacketConverter {
     outPacket.setRemovedMap(packetDTO.getRemovedMap());
     outPacket.setDate(packetDTO.getDate());
     outPacket.setAlias(packetDTO.getAlias());
+    outPacket.setVerNumCommit(packetDTO.getVerNumCommit());
+    outPacket.setNameCommit(packetDTO.getNameCommit());
+    outPacket.setCommentNameCommit(outPacket.getCommentNameCommit());
+    outPacket.setDateChangeNameCommit(packetDTO.getDateChangeNameCommit());
+    outPacket.setUserChangeCommit(packetDTO.getUserChangeCommit());
     return outPacket;
+  }
+
+  public static PacketDTO converterToPacketDTO(OutPacket outPacket) {
+    return new PacketDTO(outPacket.getId(), outPacket.getObjectIdMap(), outPacket.getClassIdMap(),
+        outPacket.getNameMap(), outPacket.getActionMap(), outPacket.getRemovedMap(),
+        outPacket.getComment(), outPacket.isSent(), outPacket.getUser(), outPacket.getBindId(),
+        outPacket.getClientVerId(), outPacket.getAlias(), outPacket.getDate());
   }
 }

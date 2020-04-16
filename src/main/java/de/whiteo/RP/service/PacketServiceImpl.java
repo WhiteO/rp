@@ -3,9 +3,9 @@ package de.whiteo.rp.service;
 import de.whiteo.rp.model.OutPacket;
 import de.whiteo.rp.repository.PacketRepository;
 import de.whiteo.rp.util.PacketConverter;
+import java.util.Set;
+import java.util.UUID;
 import org.springframework.stereotype.Service;
-
-import java.util.*;
 
 /**
  * @author Ruslan Tanas {@literal <skyuser13@gmail.com>}
@@ -36,14 +36,17 @@ public class PacketServiceImpl implements PacketService {
   }
 
   @Override
-  public void updatePackets(String uuid) {
-    try {
-      Long packetId = packetRepository.getIdByClientVerId(UUID.fromString(uuid));
-      OutPacket outPacket = packetRepository.findById(packetId).orElseThrow(Exception::new);
-      outPacket.setSent(true);
-      packetRepository.save(outPacket);
-    } catch (Exception e) {
-      e.printStackTrace();
+  public PacketDTO getPacketId(UUID clientVerId) {
+    Long packetId = packetRepository.getIdByClientVerId(clientVerId);
+    PacketDTO packetDTO = null;
+    if (0L != packetId) {
+      packetDTO = PacketConverter.converterToPacketDTO(packetRepository.getOne(packetId));
     }
+    return packetDTO;
+  }
+
+  @Override
+  public void updatePacket(PacketDTO packetDTO) {
+    packetRepository.saveAndFlush(PacketConverter.convertToOutPacket(packetDTO));
   }
 }
