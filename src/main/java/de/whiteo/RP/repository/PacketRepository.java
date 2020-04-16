@@ -51,4 +51,7 @@ public interface PacketRepository extends JpaRepository<OutPacket, Long> {
 
   @Query(value = "select P.id from PACKETS P where P.CLIENT_VER_ID = :key", nativeQuery = true)
   Long getIdByClientVerId(@Param("key") UUID key);
+
+
+
 }
