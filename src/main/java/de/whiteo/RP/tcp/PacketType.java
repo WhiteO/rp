@@ -1,4 +1,4 @@
-package de.whiteo.rp.util;
+package de.whiteo.rp.tcp;
 
 /**
  * @author Ruslan Tanas {@literal <skyuser13@gmail.com>}
@@ -6,7 +6,8 @@ package de.whiteo.rp.util;
 
 public enum PacketType {
   PACKET_COMMIT("DevDepot_commitObjects"),
-  PACKET_CHANGE_VERSION("DevDepot_changeVersion");
+  PACKET_CHANGE_VERSION("DevDepot_changeVersion"),
+  PACKET_WITH_VERSIONS("crs:versions");
 
   private String type;
 

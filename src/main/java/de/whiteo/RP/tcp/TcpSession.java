@@ -1,4 +1,4 @@
-package de.whiteo.rp.util;
+package de.whiteo.rp.tcp;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,8 +11,9 @@ import org.pcap4j.packet.TcpPacket;
 public final class TcpSession {
 
   private final Map<Short, TcpPacket> packetMap;
+  private int ByteCount;
+  private int ByteMax;
   private boolean complete;
-  private boolean halfComplete;
 
   public TcpSession(Short identification, TcpPacket tcpPacket) {
     this.complete = false;
@@ -20,20 +21,28 @@ public final class TcpSession {
     this.packetMap.put(identification, tcpPacket);
   }
 
-  public boolean isHalfComplete() {
-    return halfComplete;
-  }
-
-  public void setHalfComplete(boolean halfComplete) {
-    this.halfComplete = halfComplete;
+  public boolean isComplete() {
+    return complete;
   }
 
   public void setComplete(boolean complete) {
     this.complete = complete;
   }
 
-  public boolean isComplete() {
-    return complete;
+  public int getByteCount() {
+    return ByteCount;
+  }
+
+  public void setByteCount(int byteCount) {
+    ByteCount = byteCount;
+  }
+
+  public int getByteMax() {
+    return ByteMax;
+  }
+
+  public void setByteMax(int byteMax) {
+    ByteMax = byteMax;
   }
 
   public Map<Short, TcpPacket> getPacketMap() {

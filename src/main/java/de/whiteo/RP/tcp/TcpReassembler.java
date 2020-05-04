@@ -1,4 +1,4 @@
-package de.whiteo.rp.util;
+package de.whiteo.rp.tcp;
 
 import static org.pcap4j.util.ByteArrays.toHexString;
 
@@ -12,33 +12,27 @@ import org.pcap4j.packet.TcpPacket;
 
 public class TcpReassembler {
 
-  private static final String LAST_ELEMENT_IN_STRING = "</crs:call>fS²¦";
-  private final static String POST = "POST";
-
   public static Pair<String, String> doReassemble(List<TcpPacket> packets) {
     StringBuilder stringBuilder = new StringBuilder();
-
     for (TcpPacket p : packets) {
       String hexString = toHexString(p.getPayload().getRawData(), "");
       String convertedString = convertHexToString(hexString);
       stringBuilder.append(convertedString);
     }
-
     Pair<String, String> pairToReturn = null;
     String unpreparedString = stringBuilder.toString();
-    if (unpreparedString.contains(PacketType.PACKET_COMMIT.value()) && unpreparedString
-        .contains(LAST_ELEMENT_IN_STRING)
-        && unpreparedString.contains(POST)) {
-      int indexStartXml = unpreparedString.indexOf("<?xml");
-      int indexEndXml = unpreparedString.indexOf("fS²¦");
-      pairToReturn = new Pair<>("commit", unpreparedString.substring(indexStartXml, indexEndXml));
-    } else if (unpreparedString.contains(PacketType.PACKET_CHANGE_VERSION.value())
-        && unpreparedString
-        .contains(LAST_ELEMENT_IN_STRING) && unpreparedString.contains(POST)) {
-      int indexStartXml = unpreparedString.indexOf("<?xml");
-      int indexEndXml = unpreparedString.indexOf("fS²¦");
-      pairToReturn = new Pair<>("version_change",
-          unpreparedString.substring(indexStartXml, indexEndXml));
+    int indexStartXml = unpreparedString.indexOf("<?xml");
+    int indexEndXml = unpreparedString.indexOf("fS²¦");
+    if (-1 != indexStartXml && -1 != indexEndXml) {
+      if (unpreparedString.contains(PacketType.PACKET_COMMIT.value())) {
+        pairToReturn = new Pair<>("commit", unpreparedString.substring(indexStartXml, indexEndXml));
+      } else if (unpreparedString.contains(PacketType.PACKET_CHANGE_VERSION.value())) {
+        pairToReturn = new Pair<>("version_change",
+            unpreparedString.substring(indexStartXml, indexEndXml));
+      } else if (unpreparedString.contains(PacketType.PACKET_WITH_VERSIONS.value())) {
+        pairToReturn = new Pair<>("versions",
+            unpreparedString.substring(indexStartXml, indexEndXml));
+      }
     }
     return pairToReturn;
   }

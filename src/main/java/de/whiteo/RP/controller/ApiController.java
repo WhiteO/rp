@@ -2,10 +2,9 @@ package de.whiteo.rp.controller;
 
 import de.whiteo.rp.model.Logger;
 import de.whiteo.rp.model.OutPacket;
-import de.whiteo.rp.service.PacketDTO;
 import de.whiteo.rp.service.ApiService;
+import de.whiteo.rp.dto.PacketDTO;
 import java.util.Set;
-import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,21 +24,13 @@ public class ApiController {
     return apiService.getPackets();
   }
 
-  public void addPacket(PacketDTO packetDTO) {
-    apiService.addPacket(packetDTO);
+  public void updateOrAddPacket(PacketDTO packetDTO) {
+    apiService.updateOrAddPacket(packetDTO);
   }
 
   @GetMapping("/api/packets/count")
   public Integer getPacketsCount() {
     return apiService.getPacketsCount();
-  }
-
-  public PacketDTO getPacket(UUID clientVerId) {
-    return apiService.getPacketId(clientVerId);
-  }
-
-  public void updatePacket(PacketDTO packetDTO) {
-    apiService.updatePacket(packetDTO);
   }
 
   public void addLog(Logger logger) {

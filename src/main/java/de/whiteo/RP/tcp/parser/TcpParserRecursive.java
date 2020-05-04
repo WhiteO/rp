@@ -1,6 +1,8 @@
-package de.whiteo.rp.util;
+package de.whiteo.rp.tcp.parser;
 
+import de.whiteo.rp.dto.PacketDTO;
 import java.util.Map;
+import java.util.UUID;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -28,6 +30,21 @@ public class TcpParserRecursive {
         map.put("removed", childNode.getAttributes().getNamedItem("value").getTextContent());
       } else {
         recursivePocketedChildNodes(map, childNode);
+      }
+    }
+  }
+
+  public static void recursivePocketedChildNodesWithVersions(PacketDTO packetDTO, Node node) {
+    NodeList childNodes = node.getChildNodes();
+    for (int j = 0; j < childNodes.getLength(); j++) {
+      Node childNode = childNodes.item(j);
+      if (childNode.getNodeName().equals("crs:verNum")) {
+        packetDTO.setVerNumCommit(childNode.getTextContent());
+      } else if (childNode.getNodeName().equals("crs:versionID")) {
+        packetDTO.setClientVerId(
+            UUID.fromString(childNode.getAttributes().getNamedItem("value").getTextContent()));
+      } else {
+        recursivePocketedChildNodesWithVersions(packetDTO, childNode);
       }
     }
   }

@@ -1,7 +1,7 @@
 package de.whiteo.rp;
 
-import de.whiteo.rp.util.DebugSingleton;
-import de.whiteo.rp.util.GetPackets;
+import de.whiteo.rp.debug.DebugSingleton;
+import de.whiteo.rp.tcp.packetsEx.GetPackets;
 import org.pcap4j.core.PcapNativeException;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -20,9 +20,16 @@ public class RpApplication {
         DebugSingleton.setEnableTrue();
         LOGGER.warn("debug mode is ON");
       }
-      GetPackets.run(args[0]);
+      String result;
+      if (args[0].contains("Tcpip")) {
+        result = args[0].replace("Tcpip", "NPF");
+      }
+      else {
+        result = args[0];
+      }
+      GetPackets.run(result);
     } else {
-      LOGGER.warn("to get device name, use 'getmac /fo csv /v' and replace Tcpip with NPF");
+      LOGGER.warn("to get device name, use 'getmac /fo csv /v'");
       GetPackets.run("\\Device\\NPF_Loopback");
     }
   }

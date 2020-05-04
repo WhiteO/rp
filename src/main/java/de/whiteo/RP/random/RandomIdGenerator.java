@@ -1,4 +1,4 @@
-package de.whiteo.rp.util;
+package de.whiteo.rp.random;
 
 import java.math.BigInteger;
 import java.util.Random;
@@ -7,7 +7,7 @@ import java.util.Random;
  * @author Ruslan Tanas {@literal <skyuser13@gmail.com>}
  */
 
-public class Miscellaneous {
+public class RandomIdGenerator {
 
   private static final BigInteger MIN_FOR_RANDOM = new BigInteger(
       "1000000000000000000000000000000");

@@ -1,4 +1,4 @@
-package de.whiteo.rp.util;
+package de.whiteo.rp.debug;
 
 import de.whiteo.rp.model.Logger;
 import java.time.LocalDateTime;

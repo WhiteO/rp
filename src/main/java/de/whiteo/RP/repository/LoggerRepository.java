@@ -12,7 +12,9 @@ import org.springframework.data.jpa.repository.Query;
 public interface LoggerRepository extends JpaRepository<Logger, Long> {
 
   @Query(value =
-      "select distinct L.ID, L.ALIAS ALIAS, L.USER USER from LOGGERS L", nativeQuery = true)
+      "select distinct L.ID, L.ERROR_DATE ERROR_DATE, L.ERROR_STRING ERROR_STRING"
+      +
+      " from LOGGERS L", nativeQuery = true)
   Set<Logger> getAllLoggers();
 
   @Query(value = "select COUNT(*) from LOGGERS", nativeQuery = true)

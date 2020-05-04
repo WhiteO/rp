@@ -3,9 +3,11 @@ package de.whiteo.rp.util;
 import de.whiteo.rp.config.SpringContext;
 import de.whiteo.rp.controller.ApiController;
 import de.whiteo.rp.model.Logger;
-import de.whiteo.rp.service.PacketDTO;
+import de.whiteo.rp.dto.PacketDTO;
+import de.whiteo.rp.tcp.TcpReassembler;
+import de.whiteo.rp.tcp.parser.TcpParser;
 import java.util.List;
-import java.util.UUID;
+import java.util.Set;
 import javafx.util.Pair;
 import org.pcap4j.packet.TcpPacket;
 import org.springframework.context.ApplicationContext;
@@ -20,7 +22,7 @@ public class Executor {
 
   static {
     ApplicationContext context = SpringContext.getAppContext();
-    API_CONTROLLER = (ApiController) context.getBean("packetController");
+    API_CONTROLLER = (ApiController) context.getBean("apiController");
   }
 
   public static void doExecute(List<TcpPacket> packets) {
@@ -28,22 +30,29 @@ public class Executor {
     if (null != packetPair) {
       String pairKey = packetPair.getKey();
       String pairValue = packetPair.getValue();
-      if ("commit".equals(pairKey) && !pairValue.isEmpty()) {
-        PacketDTO packetDTO = TcpParser.parseCommitXmlFromPacket(pairValue);
-        if (null != packetDTO) {
-          API_CONTROLLER.addPacket(packetDTO);
-        }
-      } else if ("version_change".equals(pairKey) && !pairValue.isEmpty()) {
-        PacketDTO packetDTO = TcpParser.parseChangeVerXmlFromPacket(pairValue);
-        if (null != packetDTO) {
-          API_CONTROLLER.updatePacket(packetDTO);
+      if (!pairValue.isEmpty()) {
+        if ("commit".equals(pairKey)) {
+          PacketDTO packetDTO = TcpParser.parseCommitXmlFromPacket(pairValue);
+          if (null != packetDTO) {
+            API_CONTROLLER.updateOrAddPacket(packetDTO);
+          }
+        } else if ("version_change".equals(pairKey)) {
+          PacketDTO packetDTO = TcpParser.parseVersionChangeXmlFromPacket(pairValue);
+          if (null != packetDTO) {
+            API_CONTROLLER.updateOrAddPacket(packetDTO);
+          }
+        } else if ("versions".equals(pairKey)) {
+          Set<PacketDTO> packetDTOSet = TcpParser.parseVersionsXmlFromPacket(pairValue);
+          if (null != packetDTOSet) {
+            for (PacketDTO packetDTO : packetDTOSet) {
+              if (null != packetDTO) {
+                API_CONTROLLER.updateOrAddPacket(packetDTO);
+              }
+            }
+          }
         }
       }
     }
-  }
-
-  public static PacketDTO getPacketDTOFromBase(UUID clientVerId) {
-    return API_CONTROLLER.getPacket(clientVerId);
   }
 
   public static void doLogger(Logger logger) {

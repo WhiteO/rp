@@ -1,4 +1,4 @@
-package de.whiteo.rp.service;
+package de.whiteo.rp.dto;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -12,13 +12,16 @@ import java.util.UUID;
 public class PacketDTO {
 
   private Long id;
-  private Map<String, UUID> objectIdMap;
-  private Map<String, UUID> classIdMap;
-  private Map<String, String> nameMap;
-  private Map<String, Integer> actionMap;
-  private Map<String, Boolean> removedMap;
+  private final Map<String, UUID> objectIdMap;
+  private final Map<String, UUID> classIdMap;
+  private final Map<String, String> nameMap;
+  private final Map<String, Integer> actionMap;
+  private final Map<String, Boolean> removedMap;
   private String comment;
   private Boolean sent;
+  private Boolean service;
+  private Boolean update;
+  private Boolean news;
   private String user;
   private UUID bindID;
   private UUID clientVerId;
@@ -31,20 +34,18 @@ public class PacketDTO {
   private String userChangeCommit;
 
   public PacketDTO() {
-    date = LocalDateTime.now();
-    sent = false;
-    objectIdMap = new HashMap<>();
-    classIdMap = new HashMap<>();
-    nameMap = new HashMap<>();
-    actionMap = new HashMap<>();
-    removedMap = new HashMap<>();
+    this.objectIdMap = new HashMap<>();
+    this.classIdMap = new HashMap<>();
+    this.nameMap = new HashMap<>();
+    this.actionMap = new HashMap<>();
+    this.removedMap = new HashMap<>();
   }
 
   public PacketDTO(Long id, Map<String, UUID> objectIdMap,
       Map<String, UUID> classIdMap, Map<String, String> nameMap,
       Map<String, Integer> actionMap, Map<String, Boolean> removedMap, String comment,
       Boolean sent, String user, UUID bindID, UUID clientVerId, String alias,
-      LocalDateTime date) {
+      LocalDateTime date, LocalDateTime dateChangeNameCommit) {
     this.id = id;
     this.objectIdMap = objectIdMap;
     this.classIdMap = classIdMap;
@@ -58,7 +59,31 @@ public class PacketDTO {
     this.clientVerId = clientVerId;
     this.alias = alias;
     this.date = date;
-    this.dateChangeNameCommit = LocalDateTime.now();
+    this.dateChangeNameCommit = dateChangeNameCommit;
+  }
+
+  public Boolean isUpdate() {
+    return update;
+  }
+
+  public void setUpdate(Boolean update) {
+    this.update = update;
+  }
+
+  public Boolean isNews() {
+    return news;
+  }
+
+  public void setNews(Boolean news) {
+    this.news = news;
+  }
+
+  public Boolean isService() {
+    return service;
+  }
+
+  public void setService(Boolean service) {
+    this.service = service;
   }
 
   public String getUserChangeCommit() {
@@ -73,10 +98,6 @@ public class PacketDTO {
     return id;
   }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
-
   public String getComment() {
     return comment;
   }
@@ -87,10 +108,6 @@ public class PacketDTO {
 
   public Boolean isSent() {
     return sent;
-  }
-
-  public void setSent(Boolean sent) {
-    this.sent = sent;
   }
 
   public String getUser() {
@@ -137,8 +154,10 @@ public class PacketDTO {
     return verNumCommit;
   }
 
-  public void setVerNumCommit(Integer verNumCommit) {
-    this.verNumCommit = verNumCommit;
+  public void setVerNumCommit(String verNumCommit) {
+    if (null != verNumCommit && !verNumCommit.equals("")) {
+      this.verNumCommit = Integer.parseInt(verNumCommit);
+    }
   }
 
   public String getNameCommit() {
@@ -169,39 +188,19 @@ public class PacketDTO {
     return actionMap;
   }
 
-  public void setActionMap(Map<String, Integer> actionMap) {
-    this.actionMap = actionMap;
-  }
-
   public Map<String, Boolean> getRemovedMap() {
     return removedMap;
-  }
-
-  public void setRemovedMap(Map<String, Boolean> removedMap) {
-    this.removedMap = removedMap;
   }
 
   public Map<String, UUID> getObjectIdMap() {
     return objectIdMap;
   }
 
-  public void setObjectIdMap(Map<String, UUID> objectIdMap) {
-    this.objectIdMap = objectIdMap;
-  }
-
   public Map<String, UUID> getClassIdMap() {
     return classIdMap;
   }
 
-  public void setClassIdMap(Map<String, UUID> classIdMap) {
-    this.classIdMap = classIdMap;
-  }
-
   public Map<String, String> getNameMap() {
     return nameMap;
-  }
-
-  public void setNameMap(Map<String, String> nameMap) {
-    this.nameMap = nameMap;
   }
 }

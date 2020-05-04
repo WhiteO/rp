@@ -1,9 +1,9 @@
 package de.whiteo.rp.service;
 
+import de.whiteo.rp.dto.PacketDTO;
 import de.whiteo.rp.model.Logger;
 import de.whiteo.rp.model.OutPacket;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * @author Ruslan Tanas {@literal <skyuser13@gmail.com>}
@@ -11,15 +11,13 @@ import java.util.UUID;
 
 public interface ApiService {
 
+  void updateOrAddPacket(PacketDTO packetDTO);
+
+  void updatePackets(Set<PacketDTO> packetDTOSet);
+
   Set<OutPacket> getPackets();
 
-  void addPacket(PacketDTO packetDTO);
-
   Integer getPacketsCount();
-
-  PacketDTO getPacketId(UUID clientVerId);
-
-  void updatePacket(PacketDTO packetDTO);
 
   void addLogger(Logger logger);
 

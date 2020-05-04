@@ -21,7 +21,7 @@ public interface PacketRepository extends JpaRepository<OutPacket, Long> {
           +
           "P.CLIENT_VER_ID PUSH_VER_ID, P.COMMENT COMMENT, P.NUMBER_COMMIT NUMBER_COMMIT, "
           +
-          "P.NAME_COMMIT NAME_COMMIT, P.COMMENT_COMMIT COMMENT_COMMIT, "
+          "P.NAME_COMMIT NAME_COMMIT, P.COMMENT_COMMIT COMMENT_COMMIT, P.SERVICE SERVICE, "
           +
           "P.DATE_CHANGE_COMMIT DATE_CHANGE_COMMIT, P.USER_CHANGE_COMMIT USER_CHANGE_COMMIT, "
           +
@@ -47,15 +47,16 @@ public interface PacketRepository extends JpaRepository<OutPacket, Long> {
           +
           "and TA.KEY_COLUMN = TR.KEY_COLUMN "
           +
-          "where P.SENT=FALSE", nativeQuery = true)
+          "where P.SENT = FALSE and P.SERVICE = FALSE", nativeQuery = true)
   Set<OutPacket> getAllPackets();
 
-  @Query(value = "select COUNT(*) from PACKETS where SENT = false", nativeQuery = true)
+  @Query(value = "select COUNT(*) from PACKETS P "
+      +
+      "where P.SENT = FALSE and P.SERVICE = FALSE", nativeQuery = true)
   Integer getPacketsCount();
 
   @Query(value = "select P.id from PACKETS P where P.CLIENT_VER_ID = :key", nativeQuery = true)
   Long getIdByClientVerId(@Param("key") UUID key);
 
-
-
+  OutPacket getById(Long id);
 }
