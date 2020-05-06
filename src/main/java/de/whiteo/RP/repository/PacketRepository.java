@@ -19,11 +19,15 @@ public interface PacketRepository extends JpaRepository<OutPacket, Long> {
   @Query(value =
       "select distinct P.ID, P.ALIAS ALIAS, P.USER USER, P.BIND_ID CLIENT_ID, "
           +
-          "P.CLIENT_VER_ID PUSH_VER_ID, P.COMMENT COMMENT, TC.VALUE_COLUMN CLASS_ID, "
+          "P.CLIENT_VER_ID PUSH_VER_ID, P.COMMENT COMMENT, P.NUMBER_COMMIT NUMBER_COMMIT, "
           +
-          "TN.VALUE_COLUMN OBJECT_NAME, P.SENT SENT, P.DATE PUSH_DATE, T.VALUE_COLUMN OBJECT_ID, "
+          "P.NAME_COMMIT NAME_COMMIT, P.COMMENT_COMMIT COMMENT_COMMIT, P.SERVICE SERVICE, "
           +
-          "TA.VALUE_COLUMN ACTION, TR.VALUE_COLUMN REMOVED"
+          "P.DATE_CHANGE_COMMIT DATE_CHANGE_COMMIT, P.USER_CHANGE_COMMIT USER_CHANGE_COMMIT, "
+          +
+          "TC.VALUE_COLUMN CLASS_ID, TN.VALUE_COLUMN OBJECT_NAME, P.SENT SENT, P.DATE PUSH_DATE, "
+          +
+          "T.VALUE_COLUMN OBJECT_ID, TA.VALUE_COLUMN ACTION, TR.VALUE_COLUMN REMOVED"
           +
           " from PACKETS P inner join T_CLASS TC on P.CLIENT_VER_ID = TC.CLIENT_VER_ID "
           +
@@ -43,12 +47,16 @@ public interface PacketRepository extends JpaRepository<OutPacket, Long> {
           +
           "and TA.KEY_COLUMN = TR.KEY_COLUMN "
           +
-          "where P.SENT=FALSE", nativeQuery = true)
+          "where P.SENT = FALSE and P.SERVICE = FALSE", nativeQuery = true)
   Set<OutPacket> getAllPackets();
 
-  @Query(value = "select COUNT(*) from PACKETS where SENT = false", nativeQuery = true)
+  @Query(value = "select COUNT(*) from PACKETS P "
+      +
+      "where P.SENT = FALSE and P.SERVICE = FALSE", nativeQuery = true)
   Integer getPacketsCount();
 
   @Query(value = "select P.id from PACKETS P where P.CLIENT_VER_ID = :key", nativeQuery = true)
   Long getIdByClientVerId(@Param("key") UUID key);
+
+  OutPacket getById(Long id);
 }
