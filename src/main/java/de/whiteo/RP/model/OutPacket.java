@@ -101,8 +101,9 @@ public class OutPacket implements Serializable {
     this.sent = false;
   }
 
-  public OutPacket(Boolean sent) {
-    this.sent = sent;
+  public OutPacket(UUID clientVerId) {
+    this.sent = false;
+    this.clientVerId = clientVerId;
   }
 
   @JsonIgnore

@@ -43,7 +43,7 @@ public class ApiServiceImpl implements ApiService {
       if (null != packetId) {
         foundPacket = packetRepository.getById(packetId);
       } else {
-        foundPacket = new OutPacket(false);
+        foundPacket = new OutPacket(packetDTO.getClientVerId());
       }
       if (!foundPacket.isSent()) {
         if (packetDTO.isNews()) {

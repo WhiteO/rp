@@ -52,6 +52,24 @@ public interface PacketRepository extends JpaRepository<OutPacket, Long> {
 
   @Query(value = "select COUNT(*) from PACKETS P "
       +
+      "inner join T_CLASS TC on P.CLIENT_VER_ID = TC.CLIENT_VER_ID "
+      +
+      "inner join T_NAME TN on TC.CLIENT_VER_ID = TN.CLIENT_VER_ID "
+      +
+      "and TC.KEY_COLUMN = TN.KEY_COLUMN "
+      +
+      "inner join T_OBJECT T on TN.CLIENT_VER_ID = T.CLIENT_VER_ID "
+      +
+      "and TN.KEY_COLUMN = T.KEY_COLUMN "
+      +
+      "inner join T_ACTION TA on T.CLIENT_VER_ID = TA.CLIENT_VER_ID "
+      +
+      "and T.KEY_COLUMN = TA.KEY_COLUMN "
+      +
+      "inner join T_REMOVED TR on TA.CLIENT_VER_ID = TR.CLIENT_VER_ID "
+      +
+      "and TA.KEY_COLUMN = TR.KEY_COLUMN "
+      +
       "where P.SENT = FALSE and P.SERVICE = FALSE", nativeQuery = true)
   Integer getPacketsCount();
 
